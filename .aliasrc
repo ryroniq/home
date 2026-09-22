@@ -1,0 +1,69 @@
+alias a=alias
+alias b=bindkey
+alias c=clear
+alias d=date
+alias f=fg
+alias g='grep --color=always'
+alias h=history
+alias i=id
+alias j=jobs
+alias l=less
+alias m=mpv
+alias p=pwd
+alias s=ssh
+alias t=tmux
+alias v=vim
+
+alias ls='ls --color=auto'
+alias ll='ls --color=always -l'
+alias la='ls --color=always -la'
+alias lll='ls --color=always -l | less'
+alias ta='tmux attach'
+alias rr=rehash
+
+alias c3='cal -3'
+alias ct='column -t'
+alias mk=make
+alias py=python
+alias ua='uname -a'
+
+alias sc=systemctl
+alias jc=journalctl
+alias hn='hostnamectl hostname'
+alias bt=bluetoothctl
+
+alias mt=mutt
+alias nm=notmuch
+alias nmn='notmuch new'
+alias nms='notmuch search'
+
+alias pc='pass -c'
+alias pe='pass edit'
+
+alias gga='git config --list'
+alias ggg='git config --global --list'
+alias ggl='git config --local --list'
+alias gst='git status'
+alias gad='git add'
+alias gcm='git commit'
+alias gdf='git diff'
+alias glg='git log'
+alias glgg='glg --pretty=fuller --stat'
+alias grt='git remote'
+alias grv='git remote -v'
+alias gch='git checkout'
+alias gll='git pull'
+alias gft='git fetch'
+alias gsh='git push'
+alias gbr='git branch'
+
+alias gca-updatetty='gpg-connect-agent updatestartuptty /bye'
+alias gca-reload='gpg-connect-agent reloadagent /bye'
+alias gca-kill='gpg-connect-agent killagent /bye'
+
+alias flpk='flatpak --user'
+alias flpkb='flatpak-builder --user'
+alias flpkbdef='flatpak-builder --user --force-clean --repo=repo --install-deps-from=flathub build'
+
+alias trim="tr -d '\n'"
+alias show-cursor='printf "\033[?25h"'

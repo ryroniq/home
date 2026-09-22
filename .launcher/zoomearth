@@ -1,0 +1,2 @@
+#!/bin/sh
+exec firefox -private-window "https://zoom.earth/maps/temperature/"

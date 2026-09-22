@@ -1,0 +1,2 @@
+#!/bin/sh
+exec firefox -private-window "https://www.timeanddate.com/weather/"

@@ -1,0 +1,50 @@
+[aliases]
+# just for placeholder
+prog1     = mylayer
+prog2     = myclear
+prog3     = mycompose
+
+[main]
+mylayer   = layer(mylayer)
+myclear   = clear()
+mycompose = compose
+
+capslock  = layer(control)
+
+
+[mylayer]
+w = up
+a = left
+s = down
+d = right
+q = home
+e = end
+r = pageup
+f = pagedown
+
+y = home
+u = pageup
+i = pagedown
+o = end
+h = left
+j = down
+k = up
+l = right
+
+1 = f1
+2 = f2
+3 = f3
+4 = f4
+5 = f5
+6 = f6
+7 = f7
+8 = f8
+9 = f9
+0 = f10
+- = f11
+= = f12
+
+esc       = clear()
+grave     = compose
+backspace = delete
+backslash = insert

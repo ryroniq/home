@@ -1,0 +1,2 @@
+#!/bin/sh
+lynx -dump -stdin -force_html -assume_charset=utf-8 -display_charset=utf-8 -assume_unrec_charset=utf-8 -assume_local_charset=utf-8

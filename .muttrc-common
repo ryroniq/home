@@ -1,0 +1,107 @@
+set editor       = "vim"
+set send_charset = "utf-8"
+set use_domain   = no
+set charset      = "utf-8"
+set use_from     = yes
+set use_envelope_from = yes
+
+set help       = no
+set mail_check = 5
+set timeout    = 10
+set sleep_time = 0
+set pager_stop = yes
+set markers    = no
+set attach_save_dir = "~"
+set mail_check_stats
+
+set menu_scroll
+set pager_context = 5
+set pager_index_lines = 4
+set mask = ""
+
+auto_view text/html
+alternative_order text/plain text/html
+ignore   *
+unignore From To Reply-To Subject Cc Date Authentication-Results X-Spam
+
+set status_chars  = " *%A"
+set status_format = "─%r─Mutt: %f [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del:%d?%?F? Flag:%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?l? %l?]──(%s/%S)─/%V/%>──%?p?( %p postponed )?─(%P)───"
+set date_format   = "%y-%m-%d %T"
+set index_format  = "%3C | %Z [%d] %-30.30F (%-4.4c) %s"
+
+bind index,pager,attach x noop
+bind index,pager,attach p noop
+bind index \Cc quit
+
+bind pager j next-line
+bind pager k previous-line
+bind attach,index,pager \CD next-page
+bind attach,index,pager \CU previous-page
+bind pager g top
+bind pager G bottom
+bind attach,index,browser g first-entry
+bind attach,index,browser G last-entry
+
+bind index "#" noop
+bind index q noop
+
+bind pager [ half-up
+bind pager ] half-down
+
+bind compose Y send-message
+bind compose y noop
+bind compose F edit-from
+bind compose <Esc>f noop
+
+bind compose p postpone-message
+bind index   p recall-message
+
+bind attach,index,pager R   group-reply
+bind attach,index,pager \CR group-chat-reply
+
+bind attach p pipe-entry
+macro attach P "<pipe-entry>gunzip -c | xmllint --format - | less<enter>"
+
+bind index,pager N search-opposite
+
+set beep_new = yes
+
+
+color normal      color253    color233
+color indicator   color230    color238
+color status      color16     color60
+color tree        color208    color234
+color signature   color102    color234
+color message     color253    color234
+color attachment  color117    color234
+color error       color78     color234
+color tilde       color130    color235
+
+color search      color100    default
+color markers     color138    default
+
+color quoted      color107    color234
+color quoted1     color66     color234
+color quoted2     color32     color236
+color quoted3     color30     color234
+color quoted4     color99     color234
+color quoted5     color36     color234
+color quoted6     color114    color234
+color quoted7     color109    color234
+color quoted8     color41     color234
+
+color index       color202    color234   ~F
+color index       color39     color234   ~N
+color index       color39     color234   ~O
+color index       color229    color22    ~T
+color index       color240    color234   ~D
+
+color hdrdefault  color30     color233
+color header      color132    color233   '^date:'
+color header      color153    color233   '^(to|cc|bcc):'
+color header      color120    color233   '^from:'
+color header      color178    color233   '^subject:'
+color header      color31     color233   '^user-agent:'
+color header      color29     color233   '^reply-to:'
+
+color index       red black   ~D

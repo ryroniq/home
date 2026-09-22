@@ -1,0 +1,12 @@
+[user]
+	name  = ryron
+	email = ryron@dzy.me
+
+[alias]
+	serve = !git daemon --reuseaddr --verbose --base-path=. --export-all ./.git
+
+[core]
+	editor = vi
+
+[init]
+	defaultBranch = main

@@ -1,0 +1,7 @@
+set folder    = ~/Maildir
+set spoolfile = +
+set record    = +sent
+set postponed = +drafts
+set trash     = +trash
+
+mailboxes = =trash =sent =drafts

@@ -1,0 +1,2 @@
+#!/bin/sh
+exec firefox -private-window "https://www.iqair.com/th-en/air-quality-map"

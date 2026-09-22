@@ -1,0 +1,3 @@
+#!/bin/sh
+if [ -z $1 ]; then echo "Provide an IP address"; exit; fi
+exec firefox -private-window "https://ipinfo.io/$1"
