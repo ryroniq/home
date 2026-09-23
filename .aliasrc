@@ -21,11 +21,13 @@ alias lll='ls --color=always -l | less'
 alias ta='tmux attach'
 alias rr=rehash
 
-alias c3='cal -3'
-alias ct='column -t'
 alias mk=make
 alias py=python
+
+alias c3='cal -3'
+alias ct='column -t'
 alias ua='uname -a'
+alias rp=realpath
 
 alias sc=systemctl
 alias jc=journalctl
@@ -60,10 +62,6 @@ alias gbr='git branch'
 alias gca-updatetty='gpg-connect-agent updatestartuptty /bye'
 alias gca-reload='gpg-connect-agent reloadagent /bye'
 alias gca-kill='gpg-connect-agent killagent /bye'
-
-alias flpk='flatpak --user'
-alias flpkb='flatpak-builder --user'
-alias flpkbdef='flatpak-builder --user --force-clean --repo=repo --install-deps-from=flathub build'
 
 alias trim="tr -d '\n'"
 alias show-cursor='printf "\033[?25h"'

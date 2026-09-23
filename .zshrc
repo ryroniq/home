@@ -57,4 +57,18 @@ precmd() {
 	print -Pn "\e]0;%n@%m: %~\a"
 }
 
+yp() {
+  (( $# )) || { print -u2 "usage: yp <file>"; return 1 }
+  [[ -e $1 ]] || { print -u2 "yp: no such file: $1"; return 1 }
+  local p=${1:A}
+  if [[ -z $DISPLAY ]]; then
+    print -u2 "yp: DISPLAY not set, not copied"
+  elif (( ! $+commands[xclip] )); then
+    print -u2 "yp: xclip not found, not copied"
+  else
+    print -rn -- $p | xclip -selection clipboard
+  fi
+  print -r -- $p
+}
+
 [ -f $HOME/.zshrc.local ] && source $HOME/.zshrc.local
