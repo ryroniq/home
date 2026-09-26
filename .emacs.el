@@ -366,3 +366,62 @@
  notmuch-show-logo nil
  notmuch-hello-thousands-separator ","
  )
+
+
+(unless (display-graphic-p)
+  (define-key input-decode-map "\e[P" (kbd "<f1>"))
+  (define-key input-decode-map "\e[Q" (kbd "<f2>"))
+  (define-key input-decode-map "\e[R" (kbd "<f3>"))
+  (define-key input-decode-map "\e[S" (kbd "<f4>"))
+
+  (define-key input-decode-map "\e[1;2P" (kbd "S-<f1>"))
+  (define-key input-decode-map "\e[1;2Q" (kbd "S-<f2>"))
+  (define-key input-decode-map "\e[1;2R" (kbd "S-<f3>"))
+  (define-key input-decode-map "\e[1;2S" (kbd "S-<f4>"))
+
+  (defun my-define-printable-key (char modifier key)
+    (define-key input-decode-map
+                (format "\e[%d;%du" char modifier)
+                (kbd key)))
+  (let ((unshifted "0123456789-=\\[];',./`")
+        (shifted   "!@#$%^&*()_+|{}:\"<>?~"))
+
+    ;; Ctrl / Ctrl+Alt
+    (dolist (char (string-to-list unshifted))
+      (my-define-printable-key char 5 (format "C-%c" char))
+      (my-define-printable-key char 7 (format "C-M-%c" char)))
+
+    ;; Ctrl+Shift / Ctrl+Alt+Shift
+    (dolist (char (string-to-list shifted))
+      (my-define-printable-key char 6 (format "C-%c" char))
+      (my-define-printable-key char 8 (format "C-M-%c" char))))
+
+  (defun my-define-special-key (sequence key)
+    (define-key input-decode-map sequence (kbd key)))
+
+  (dolist (x '(("\177" "127" "u" "backspace")
+               (""     "3"   "~" "delete")
+               (""     "2"   "~" "insert")
+               (""     "5"   "~" "prior")
+               (""     "6"   "~" "next")
+               ("\e[H" "1"   "H" "home")
+               ("\e[F" "1"   "F" "end")))
+    (pcase-let ((`(,normal ,code ,suffix ,key) x))
+      (dolist (m '((2 "S-")
+                   (3 "M-")
+                   (4 "M-S-")
+                   (5 "C-")
+                   (6 "C-S-")
+                   (7 "C-M-")
+                   (8 "C-M-S-")))
+        (if (string-empty-p normal)
+            (my-define-special-key
+             (format "\e[%s%s" code suffix)
+             (format "<%s>" key))
+          (my-define-special-key
+           normal
+           (format "<%s>" key))
+          )
+        (my-define-special-key
+         (format "\e[%s;%d%s" code (car m) suffix)
+         (format "%s<%s>" (cadr m) key))))))
