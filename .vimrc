@@ -20,7 +20,7 @@ set autoindent
 set smartindent
 
 set mouse=a
-set pastetoggle=<F5>
+set pastetoggle=+
 set nonumber
 set nolist
 set listchars=tab:>-,space:·
@@ -57,22 +57,17 @@ nnoremap <C-S-up>    <C-w>K
 nnoremap <C-S-right> <C-w>L
 
 nnoremap Q :marks<CR>
-nnoremap [ :tabprev<CR>
-nnoremap ] :tabnext<CR>
-nnoremap + <C-a>
-nnoremap - <C-x>
 nnoremap _ <C-w>s
 nnoremap \| <C-w>v
 
-nnoremap <C-a> :
 nnoremap <C-f> :e<space>
-nnoremap <C-g> :ju<CR>
+nnoremap <C-g> :jumps<CR>
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
-nnoremap <C-n> :bnext<CR>
-nnoremap <C-p> :bprev<CR>
+nnoremap <C-n> :cnext<CR>
+nnoremap <C-p> :cprev<CR>
 nnoremap <C-q> :reg<CR>
 
 nnoremap <leader>o :tabonly<CR>
@@ -83,6 +78,8 @@ nnoremap <leader>' :set list!<CR>
 nnoremap <leader>; :set number!<CR>
 nnoremap <leader>- :tabclose<CR>
 nnoremap <leader>= :tabnew<CR>
+nnoremap <leader>[ :tabprev<CR>
+nnoremap <leader>] :tabnext<CR>
 
 nnoremap <C-b><C-a> :badd<space>
 nnoremap <C-b><C-b> :b<space>
@@ -90,21 +87,8 @@ nnoremap <C-b><C-d> :bdel<CR>
 nnoremap <C-b><C-e> :blast<CR>
 nnoremap <C-b><C-f> :bfirst<CR>
 nnoremap <C-b><C-l> :buffers<CR>
-
-nnoremap <C-s><C-h> <C-w>v
-nnoremap <C-s><C-j> <C-w>s<C-w>j
-nnoremap <C-s><C-k> <C-w>s
-nnoremap <C-s><C-l> <C-w>v<C-w>l
-nnoremap <C-s><C-q> :q<CR>
-nnoremap <C-s><C-s> :shell<CR>
-nnoremap <C-s><C-w> :w<CR>
-
-nnoremap <C-x><C-d> :cc<CR>
-nnoremap <C-x><C-m> :make<Up>
-nnoremap <C-x><C-n> :cnext<CR>
-nnoremap <C-x><C-p> :cprevious<CR>
-nnoremap <C-x><C-s> :clist<CR>
-nnoremap <C-x><C-x> :!<space>
+nnoremap <C-b><C-n> :bnext<CR>
+nnoremap <C-b><C-p> :bprev<CR>
 
 cnoremap <C-x> <C-k>
 cnoremap <C-j> <Down>
