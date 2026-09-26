@@ -7,11 +7,12 @@ path=(~/.bin ~/.launcher ~/.scripts ~/.local/bin "$path[@]")
 export PATH
 
 export EDITOR=vi
-export GPG_TTY=$(tty)
 export LESS='-R'
-
 export COLORTERM=truecolor
 export KEYTIMEOUT=1
+
+export GPG_TTY=$(tty)
+export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 
 autoload checkmail
 
@@ -54,7 +55,7 @@ PROMPT='%F{green}>%f '
 RPROMPT=''
 
 precmd() {
-	print -Pn "\e]0;%n@%m: %~\a"
+  print -Pn "\e]0;%n@%m: %~\a"
 }
 
 yp() {

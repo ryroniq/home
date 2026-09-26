@@ -7,6 +7,8 @@
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file)
 
+(load-theme 'doom-moonlight)
+
 (set-frame-font "monospace 13" nil t)
 (set-fontset-font "fontset-default" 'kana "Migu 1M")
 (set-fontset-font "fontset-default" 'han "Noto Sans CJK SC")
@@ -202,17 +204,19 @@
 (keymap-global-set "<f1>"    'my/spawn-st)
 (keymap-global-set "<f2>"    'shell)
 
-(keymap-global-set "C-]"     'other-window)
-(keymap-global-set "C-\\"    'my/other-window-1)
-
 (keymap-global-set "C-v"     'other-window)
 (keymap-global-set "M-v"     'my/x-selection-to-emacs)
 
 (keymap-global-set "M-L"     'mark-word)
 
+(keymap-global-set "C-;"     'other-window)
+(keymap-global-set "C-'"     'my/other-window-1)
+(keymap-global-set "C-("     'my/transpose-line-backward)
+(keymap-global-set "C-)"     'my/transpose-line-forward)
 (keymap-global-set "C-{"     'winner-undo)
 (keymap-global-set "C-}"     'winner-redo)
 
+(keymap-global-set "<delete>"  'delete-char)
 (keymap-global-set "<prior>"   'my/scroll-half-down)
 (keymap-global-set "<next>"    'my/scroll-half-up)
 (keymap-global-set "C-<prior>" 'scroll-down-command)
@@ -238,8 +242,6 @@
 
 (keymap-global-set "M-p" 'backward-paragraph)
 (keymap-global-set "M-n" 'forward-paragraph)
-(keymap-global-set "M-[" 'my/transpose-line-backward)
-(keymap-global-set "M-]" 'my/transpose-line-forward)
 
 (keymap-global-set "C-M-k"   'kill-sexp)
 (keymap-global-set "C-M-S-k" 'backward-kill-sexp)
@@ -267,6 +269,8 @@
 (keymap-global-set "C-q b"   'switch-to-buffer)
 (keymap-global-set "C-q C-b" 'switch-to-buffer)
 (keymap-global-set "C-q h"   'previous-buffer)
+(keymap-global-set "C-q j"   'other-window)
+(keymap-global-set "C-q k"   'my/other-window-1)
 (keymap-global-set "C-q l"   'next-buffer)
 
 (keymap-global-set "C-q SPC"   'rectangle-mark-mode)
@@ -293,9 +297,9 @@
 (keymap-global-set "C-q /"   'my/list-window-layouts)
 (keymap-global-set "C-q `"   'my/delete-window-layout)
 
-(keymap-global-set "C-q C-j" 'bookmark-jump)
-(keymap-global-set "C-q C-k" 'bookmark-set)
-(keymap-global-set "C-q C-l" 'bookmark-bmenu-list)
+(keymap-global-set "C-q ;"   'bookmark-jump)
+(keymap-global-set "C-q '"   'bookmark-set)
+(keymap-global-set "C-q \""  'bookmark-bmenu-list)
 
 (keymap-global-set "C-q x"   'my/spawn-st)
 (keymap-global-set "C-q X"   'shell)
