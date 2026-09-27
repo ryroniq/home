@@ -325,63 +325,6 @@
 (keymap-global-set "C-q S-<return>" 'my/spawn-st)
 
 
-(unless (display-graphic-p)
-  (define-key input-decode-map "\e[P" (kbd "<f1>"))
-  (define-key input-decode-map "\e[Q" (kbd "<f2>"))
-  (define-key input-decode-map "\e[R" (kbd "<f3>"))
-  (define-key input-decode-map "\e[S" (kbd "<f4>"))
-
-  (define-key input-decode-map "\e[1;2P" (kbd "S-<f1>"))
-  (define-key input-decode-map "\e[1;2Q" (kbd "S-<f2>"))
-  (define-key input-decode-map "\e[1;2R" (kbd "S-<f3>"))
-  (define-key input-decode-map "\e[1;2S" (kbd "S-<f4>"))
-
-  (defun my-define-printable-key (char modifier key)
-    (define-key input-decode-map
-                (format "\e[%d;%du" char modifier)
-                (kbd key)))
-  (let ((unshifted "0123456789-=\\[];',./`")
-        (shifted   "!@#$%^&*()_+|{}:\"<>?~"))
-
-    ;; Ctrl / Ctrl+Alt
-    (dolist (char (string-to-list unshifted))
-      (my-define-printable-key char 5 (format "C-%c" char))
-      (my-define-printable-key char 7 (format "C-M-%c" char)))
-
-    ;; Ctrl+Shift / Ctrl+Alt+Shift
-    (dolist (char (string-to-list shifted))
-      (my-define-printable-key char 6 (format "C-%c" char))
-      (my-define-printable-key char 8 (format "C-M-%c" char))))
-
-  (defun my-define-special-key (sequence key)
-    (define-key input-decode-map sequence (kbd key)))
-
-  (dolist (x '(("\177" "127" "u" "backspace")
-               (""     "3"   "~" "delete")
-               (""     "2"   "~" "insert")
-               (""     "5"   "~" "prior")
-               (""     "6"   "~" "next")
-               ("\e[H" "1"   "H" "home")
-               ("\e[F" "1"   "F" "end")))
-    (pcase-let ((`(,normal ,code ,suffix ,key) x))
-      (dolist (m '((2 "S-")
-                   (3 "M-")
-                   (4 "M-S-")
-                   (5 "C-")
-                   (6 "C-S-")
-                   (7 "C-M-")
-                   (8 "C-M-S-")))
-        (if (string-empty-p normal)
-            (my-define-special-key
-             (format "\e[%s%s" code suffix)
-             (format "<%s>" key))
-          (my-define-special-key
-           normal
-           (format "<%s>" key))
-          )
-        (my-define-special-key
-         (format "\e[%s;%d%s" code (car m) suffix)
-         (format "%s<%s>" (cadr m) key))))))
 (use-package color
   :config
   (defun colorize-compilation-buffer ()
@@ -441,3 +384,95 @@
   ("C-q n" . notmuch))
 
 
+(if (display-graphic-p)
+    (progn
+      (set-frame-font "monospace 13" nil t)
+      (set-fontset-font "fontset-default" 'kana "Migu 1M")
+      (set-fontset-font "fontset-default" 'han "Noto Sans CJK SC")
+      (set-fontset-font "fontset-default" 'greek "Noto Sans Mono"))
+
+  (unless (package-installed-p 'xclip)
+    (package-refresh-contents)
+    (package-install 'xclip))
+  (xclip-mode 1)
+  (setq select-enable-clipboard t)
+  (setq select-enable-primary t))
+
+(defconst my/csi-u-special-keys
+  '((9 . tab) (13 . return) (27 . escape) (127 . backspace))
+  "CSI u codepoints that decode to function-key symbols.")
+
+(defconst my/csi-letter-keys
+  '((?A . up) (?B . down) (?C . right) (?D . left)
+    (?H . home) (?F . end)
+    (?P . f1) (?Q . f2) (?R . f3) (?S . f4))
+  "Final bytes of CSI 1;<mod><X> and SS3 <X> sequences.")
+
+(defconst my/csi-tilde-keys
+  '((2 . insert) (3 . delete) (5 . prior) (6 . next)
+    (15 . f5) (17 . f6) (18 . f7) (19 . f8)
+    (20 . f9) (21 . f10) (23 . f11) (24 . f12))
+  "Parameters of CSI <n>;<mod>~ sequences.")
+
+(defun my/csi--mod-list (mods &optional shift-ok)
+  "Modifier symbols for CSI modifier parameter MODS.
+MODS is 1 + bitmask: 1=shift 2=alt/meta 4=ctrl 8=super.
+Shift is included only when SHIFT-OK is non-nil."
+  (let ((bits (1- mods)))
+    (delq nil (list (and (/= 0 (logand bits 4)) 'control)
+                    (and (/= 0 (logand bits 2)) 'meta)
+                    (and (/= 0 (logand bits 8)) 'super)
+                    (and shift-ok (/= 0 (logand bits 1)) 'shift)))))
+
+(defun my/csi-u--event (code mods)
+  "Return the Emacs event for CSI u CODE with modifier parameter MODS."
+  (let* ((special (alist-get code my/csi-u-special-keys))
+         (upper   (and (not special) (<= ?A code ?Z)))
+         (base    (or special (if upper (downcase code) code)))
+         (letter  (and (not special) (<= ?a base ?z)))
+         ;; Shift only matters for letters and special keys; for other
+         ;; printables the codepoint is already the shifted character.
+         (shift-ok (or special letter))
+         (mod-list (my/csi--mod-list mods shift-ok)))
+    (when (and upper (not (memq 'shift mod-list)))
+      (setq mod-list (append mod-list '(shift))))
+    (if (and letter
+             (memq 'shift mod-list)
+             (not (memq 'control mod-list)))
+        ;; S-a -> A, M-S-o -> M-O, s-S-x -> s-X
+        (event-convert-list (append (remq 'shift mod-list)
+                                    (list (upcase base))))
+      (event-convert-list (append mod-list (list base))))))
+
+(defconst my/csi-u-map
+  (let ((map (make-sparse-keymap)))
+    ;; Regular CSI u: \e[<code>;<mod>u
+    (dolist (code (append (mapcar #'car my/csi-u-special-keys)
+                          (number-sequence 32 126)))
+      (dolist (mods (number-sequence 2 16))
+        (define-key map (format "\e[%d;%du" code mods)
+                    (vector (my/csi-u--event code mods)))))
+    ;; Letter-final keys: \eO<X> and \e[1;<mod><X>
+    (pcase-dolist (`(,final . ,key) my/csi-letter-keys)
+      (define-key map (format "\eO%c" final) (vector key))
+      (dolist (mods (number-sequence 2 16))
+        (define-key map (format "\e[1;%d%c" mods final)
+                    (vector (event-convert-list
+                             (append (my/csi--mod-list mods t) (list key)))))))
+    ;; Tilde keys: \e[<n>~ and \e[<n>;<mod>~
+    (pcase-dolist (`(,n . ,key) my/csi-tilde-keys)
+      (define-key map (format "\e[%d~" n) (vector key))
+      (dolist (mods (number-sequence 2 16))
+        (define-key map (format "\e[%d;%d~" n mods)
+                    (vector (event-convert-list
+                             (append (my/csi--mod-list mods t) (list key)))))))
+    map)
+  "Decode map for CSI u and xterm-style modified function/cursor keys.")
+
+(defun my/csi-u-install ()
+  "Chain `my/csi-u-map' into this terminal's `input-decode-map'."
+  (let ((map (copy-keymap my/csi-u-map)))
+    (set-keymap-parent map (keymap-parent input-decode-map))
+    (set-keymap-parent input-decode-map map)))
+
+(add-hook 'tty-setup-hook #'my/csi-u-install)
