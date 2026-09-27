@@ -18,8 +18,10 @@ alias ls='ls --color=auto'
 alias ll='ls --color=always -l'
 alias la='ls --color=always -la'
 alias lll='ls --color=always -l | less'
-alias ta='tmux attach'
 alias rr=rehash
+
+alias ta='tmux attach'
+alias tl='tmux ls'
 
 alias mk=make
 alias py=python
