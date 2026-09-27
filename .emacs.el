@@ -223,8 +223,8 @@
 (keymap-global-set "C-'"     'my/other-window-1)
 (keymap-global-set "C-("     'my/transpose-line-backward)
 (keymap-global-set "C-)"     'my/transpose-line-forward)
-(keymap-global-set "C-{"     'winner-undo)
-(keymap-global-set "C-}"     'winner-redo)
+(keymap-global-set "M-{"     'winner-undo)
+(keymap-global-set "M-}"     'winner-redo)
 
 (keymap-global-set "<delete>"  'delete-char)
 (keymap-global-set "<prior>"   'my/scroll-half-down)
