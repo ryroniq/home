@@ -3,16 +3,20 @@
 (require 'package)
 (add-to-list 'package-archives
              '("melpa" . "https://melpa.org/packages/") t)
+(package-initialize)
+
+;; Install use-package if it's not somehow built-in
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+(require 'use-package) ; Neccesary to bootstrap the macro itself!
+
 
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file)
 
 (load-theme 'doom-moonlight)
-
-(set-frame-font "monospace 13" nil t)
-(set-fontset-font "fontset-default" 'kana "Migu 1M")
-(set-fontset-font "fontset-default" 'han "Noto Sans CJK SC")
-(set-fontset-font "fontset-default" 'greek "Noto Sans Mono")
 
 (scroll-bar-mode 0)
 (menu-bar-mode 0)
@@ -22,7 +26,6 @@
 (winner-mode 1)
 
 (setq
- magit-define-global-key-bindings 'recommended
  inhibit-startup-screen t
  frame-resize-pixelwise t
  winner-ring-size 50
@@ -43,6 +46,12 @@
   (define-key org-mode-map (kbd "C-,") 'my/scroll-half-down)
 )
 (add-hook 'org-mode-hook 'my/org-mode-hook)
+
+(defun my/set-mark-only ()
+  "Set a mark at point without activating the region highlight."
+  (interactive)
+  (push-mark nil t nil)
+  (message "Mark set (no selection)."))
 
 (defun my/scroll-half-down ()
   (interactive)
@@ -207,6 +216,7 @@
 (keymap-global-set "C-v"     'other-window)
 (keymap-global-set "M-v"     'my/x-selection-to-emacs)
 
+(keymap-global-set "M-SPC"   'my/set-mark-only)
 (keymap-global-set "M-L"     'mark-word)
 
 (keymap-global-set "C-;"     'other-window)
@@ -238,7 +248,6 @@
 (keymap-global-set "M-z" 'backward-delete-char-untabify)
 (keymap-global-set "M-Z" 'delete-char)
 (keymap-global-set "M-o" 'my/duplicate-dwim)
-(keymap-global-set "M-O" 'my/duplicate-line)
 
 (keymap-global-set "M-p" 'backward-paragraph)
 (keymap-global-set "M-n" 'forward-paragraph)
@@ -298,7 +307,7 @@
 (keymap-global-set "C-q `"   'my/delete-window-layout)
 
 (keymap-global-set "C-q ;"   'bookmark-jump)
-(keymap-global-set "C-q '"   'bookmark-set)
+(keymap-global-set "C-q :"   'bookmark-set)
 (keymap-global-set "C-q \""  'bookmark-bmenu-list)
 
 (keymap-global-set "C-q x"   'my/spawn-st)
@@ -311,61 +320,9 @@
 (keymap-global-set "C-q '"   'quoted-insert)
 (keymap-global-set "C-q C-'" 'quoted-insert)
 
-(keymap-global-set "C-q g"   'magit-status)
-(keymap-global-set "C-x g"   'magit-status)
-
-(keymap-global-set "C-q m"   'mu4e)
-(keymap-global-set "C-q n"   'notmuch)
-
 (keymap-global-set "C-q <return>"   'my/start-process)
 (keymap-global-set "C-q C-<return>" 'my/launcher)
 (keymap-global-set "C-q S-<return>" 'my/spawn-st)
-
-
-(defun colorize-compilation-buffer ()
-  (let ((inhibit-read-only t))
-    (ansi-color-apply-on-region (point-min) (point-max))))
-(add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
-
-
-(require 'color)
-(let* ((ws-lighten 30)
-       (ws-color (color-lighten-name "#880044" ws-lighten)))
-  (custom-set-faces
-   `(whitespace-newline                ((t (:foreground ,ws-color))))
-   `(whitespace-missing-newline-at-eof ((t (:foreground ,ws-color))))
-   `(whitespace-space                  ((t (:foreground ,ws-color))))
-   `(whitespace-space-after-tab        ((t (:foreground ,ws-color))))
-   `(whitespace-space-before-tab       ((t (:foreground ,ws-color))))
-   `(whitespace-tab                    ((t (:foreground ,ws-color))))
-   `(whitespace-trailing               ((t (:foreground ,ws-color))))))
-
-(setq shr-color-visible-luminance-min 100)
-
-(autoload 'mu4e "mu4e" "mu4e mail" t)
-
-(defun my/mu4e-init ()
-  (setq mu4e-update-interval 180)
-  (with-eval-after-load "mm-decode"
-    (add-to-list 'mm-discouraged-alternatives "text/html")
-    (add-to-list 'mm-discouraged-alternatives "text/richtext")
-    (add-to-list 'mm-discouraged-alternatives "multipart/related"))
-  (add-to-list 'mu4e-view-mime-part-actions
-               '(:name "dmarc" :handler "gunzip -c | xmllint --format -" :receives pipe))
-  (add-to-list 'mu4e-view-mime-part-actions
-               '(:name "lynx" :handler "lynx -dump -stdin -force_html -assume_charset=utf-8 -display_charset=utf-8 -assume_unrec_charset=utf-8 -assume_local_charset=utf-8" :receives pipe))
-  (load "~/.emacs.d/mu4e.el"))
-
-(advice-add 'mu4e :around
-            (lambda (orig-fun &rest args)
-              (my/mu4e-init)
-              (apply orig-fun args)))
-
-(autoload 'notmuch "notmuch" "notmuch mail" t)
-(setq
- notmuch-show-logo nil
- notmuch-hello-thousands-separator ","
- )
 
 
 (unless (display-graphic-p)
@@ -425,3 +382,62 @@
         (my-define-special-key
          (format "\e[%s;%d%s" code (car m) suffix)
          (format "%s<%s>" (cadr m) key))))))
+(use-package color
+  :config
+  (defun colorize-compilation-buffer ()
+    ((let ((inhibit-read-only t))
+       (ansi-color-apply-on-region (point-min) (point-max))))
+    (add-hook 'compilation-filter-hook 'colorize-compilation-buffer))
+  (setq shr-color-visible-luminance-min 100)
+  (let* ((ws-lighten 30)
+         (ws-color (color-lighten-name "#880044" ws-lighten)))
+    (custom-set-faces
+     `(whitespace-newline                ((t (:foreground ,ws-color))))
+     `(whitespace-missing-newline-at-eof ((t (:foreground ,ws-color))))
+     `(whitespace-space                  ((t (:foreground ,ws-color))))
+     `(whitespace-space-after-tab        ((t (:foreground ,ws-color))))
+     `(whitespace-space-before-tab       ((t (:foreground ,ws-color))))
+     `(whitespace-tab                    ((t (:foreground ,ws-color))))
+     `(whitespace-trailing               ((t (:foreground ,ws-color)))))))
+
+
+(use-package magit
+  :init
+  (setq magit-define-global-key-bindings 'recommended)
+  :bind
+  ("C-x g" . magit-status)
+  ("C-q g" . magit-status))
+
+
+(use-package mu4e
+  :init
+  (autoload 'mu4e "mu4e" "mu4e mail" t)
+  (defun my/mu4e-init ()
+    (setq mu4e-update-interval 180)
+    (with-eval-after-load "mm-decode"
+      (add-to-list 'mm-discouraged-alternatives "text/html")
+      (add-to-list 'mm-discouraged-alternatives "text/richtext")
+      (add-to-list 'mm-discouraged-alternatives "multipart/related"))
+    (add-to-list 'mu4e-view-mime-part-actions
+                 '(:name "dmarc" :handler "gunzip -c | xmllint --format -" :receives pipe))
+    (add-to-list 'mu4e-view-mime-part-actions
+                 '(:name "lynx" :handler "lynx -dump -stdin -force_html -assume_charset=utf-8 -display_charset=utf-8 -assume_unrec_charset=utf-8 -assume_local_charset=utf-8" :receives pipe))
+    (load "~/.emacs.d/mu4e.el"))
+  (advice-add 'mu4e :around
+              (lambda (orig-fun &rest args)
+                (my/mu4e-init)
+                (apply orig-fun args)))
+  :bind
+  ("C-q m" . mu4e))
+
+
+
+(use-package notmuch
+  :init
+  (autoload 'notmuch "notmuch" "notmuch mail" t)
+  (setq notmuch-show-logo nil
+        notmuch-hello-thousands-separator ",")
+  :bind
+  ("C-q n" . notmuch))
+
+
