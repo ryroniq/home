@@ -41,7 +41,7 @@ if [ -x $HOME/.xinitrc.wm ]; then
 	exec $HOME/.xinitrc.wm
 else
 	while true; do
-		dwm
+		dgm
 		[ $? -ne 1 ] && exit
 	done
 fi

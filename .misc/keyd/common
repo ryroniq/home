@@ -1,35 +1,37 @@
-[aliases]
-# just for placeholder
-prog1     = mylayer
-prog2     = myclear
-prog3     = mycompose
-
 [main]
-mylayer   = layer(mylayer)
-myclear   = clear()
-mycompose = compose
+capslock = overload(control, esc)
+space    = lettermod(mylayer, space, 150, 200)
 
-capslock  = layer(control)
+# Left hand home row mods
+a = lettermod(meta, a, 150, 200)
+s = lettermod(alt, s, 150, 200)
+d = lettermod(control, d, 150, 200)
+f = lettermod(shift, f, 150, 200)
+
+# Right hand home row mods
+j = lettermod(shift, j, 150, 200)
+k = lettermod(control, k, 150, 200)
+l = lettermod(alt, l, 150, 200)
+; = lettermod(meta, ;, 150, 200)
 
 
 [mylayer]
-w = up
-a = left
-s = down
-d = right
-q = home
-e = end
-r = pageup
-f = pagedown
-
 y = home
 u = pageup
 i = pagedown
 o = end
+g = tab
 h = left
 j = down
 k = up
 l = right
+; = enter
+[ = esc
+
+b = insert
+n = backspace
+m = delete
+/ = compose
 
 1 = f1
 2 = f2
@@ -44,7 +46,3 @@ l = right
 - = f11
 = = f12
 
-esc       = clear()
-grave     = compose
-backspace = delete
-backslash = insert

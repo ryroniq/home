@@ -203,126 +203,127 @@
         (message "Layout '%s' deleted." name)
       (message "No layout found with the name '%s'." name))))
 
+(defun my-delete-whitespace-forward ()
+  "Delete whitespace from point up to the next non-whitespace char."
+  (interactive)
+  (delete-region (point)
+                 (progn (skip-chars-forward " \t") (point))))
+
+(global-set-key (kbd "C-c d") #'my-delete-whitespace-forward)
+
 
 (keymap-global-unset "C-x C-z")
 (keymap-global-unset "C-q")
 (keymap-global-unset "C-z")
+(keymap-global-unset "C-v")
 (keymap-global-unset "C-M-v")
 (keymap-global-unset "C-M-S-v")
 
-(keymap-global-set "<f1>"    'my/spawn-st)
-(keymap-global-set "<f2>"    'shell)
 
-(keymap-global-set "C-v"     'other-window)
-(keymap-global-set "M-v"     'my/x-selection-to-emacs)
+(keymap-global-set "<f1>" 'my/spawn-st)
+(keymap-global-set "<f2>" 'shell)
 
-(keymap-global-set "M-SPC"   'my/set-mark-only)
-(keymap-global-set "M-L"     'mark-word)
+(keymap-global-set "C-;" 'other-window)
+(keymap-global-set "C-'" 'my/other-window-1)
+(keymap-global-set "C-(" 'my/transpose-line-backward)
+(keymap-global-set "C-)" 'my/transpose-line-forward)
 
-(keymap-global-set "C-;"     'other-window)
-(keymap-global-set "C-'"     'my/other-window-1)
-(keymap-global-set "C-("     'my/transpose-line-backward)
-(keymap-global-set "C-)"     'my/transpose-line-forward)
-(keymap-global-set "M-{"     'winner-undo)
-(keymap-global-set "M-}"     'winner-redo)
-
-(keymap-global-set "<delete>"  'delete-char)
-(keymap-global-set "<prior>"   'my/scroll-half-down)
-(keymap-global-set "<next>"    'my/scroll-half-up)
-(keymap-global-set "C-<prior>" 'scroll-down-command)
-(keymap-global-set "C-<next>"  'scroll-up-command)
-
-(keymap-global-set "C-,"   'my/scroll-half-down)
-(keymap-global-set "C-."   'my/scroll-half-up)
-(keymap-global-set "M-,"   'scroll-down-command)
-(keymap-global-set "M-."   'scroll-up-command)
-(keymap-global-set "C-M-," 'beginning-of-buffer)
-(keymap-global-set "C-M-." 'end-of-buffer)
-(keymap-global-set "C-<"   'my/scroll-half-down-other-window)
-(keymap-global-set "C->"   'my/scroll-half-up-other-window)
-(keymap-global-set "M-<"   'scroll-other-window-down)
-(keymap-global-set "M->"   'scroll-other-window)
-(keymap-global-set "C-M-<" 'beginning-of-buffer-other-window)
-(keymap-global-set "C-M->" 'end-of-buffer-other-window)
-
-(keymap-global-set "M-z" 'backward-delete-char-untabify)
-(keymap-global-set "M-Z" 'delete-char)
-(keymap-global-set "M-o" 'my/duplicate-dwim)
-
-(keymap-global-set "M-p" 'backward-paragraph)
+(keymap-global-set "M-L" 'mark-word)
 (keymap-global-set "M-n" 'forward-paragraph)
+(keymap-global-set "M-o" 'my/duplicate-dwim)
+(keymap-global-set "M-p" 'backward-paragraph)
+(keymap-global-set "M-v" 'my/x-selection-to-emacs)
+(keymap-global-set "M-{" 'winner-undo)
+(keymap-global-set "M-}" 'winner-redo)
 
-(keymap-global-set "C-M-k"   'kill-sexp)
-(keymap-global-set "C-M-S-k" 'backward-kill-sexp)
+(keymap-global-set "C-M-;"   'kill-sexp)
+(keymap-global-set "C-M-'"   'backward-kill-sexp)
 
-(keymap-global-set "C-z ,"   'rename-buffer)
-(keymap-global-set "C-z r"   'revert-buffer)
-(keymap-global-set "C-z k"   'kill-current-buffer)
 
-(keymap-global-set "C-z t"   'load-theme)
-(keymap-global-set "C-z C-t" 'my/disable-all-themes)
-(keymap-global-set "C-z >"   'suspend-emacs)
+(keymap-global-set "<delete>"      'delete-char)
+(keymap-global-set "M-<backspace>" 'backward-kill-word)
+(keymap-global-set "M-<delete>"    'kill-word)
 
-(keymap-global-set "C-q 1"   'delete-other-windows)
-(keymap-global-set "C-q C-1" 'delete-other-windows)
-(keymap-global-set "C-q 2"   'split-window-below)
-(keymap-global-set "C-q C-2" 'split-window-below)
-(keymap-global-set "C-q 3"   'split-window-right)
-(keymap-global-set "C-q C-3" 'split-window-right)
-(keymap-global-set "C-q 0"   'delete-window)
-(keymap-global-set "C-q C-0" 'delete-window)
+(keymap-global-set   "<prior>"     'my/scroll-half-down)
+(keymap-global-set   "<next>"      'my/scroll-half-up)
+(keymap-global-set "C-<prior>"     'scroll-down-command)
+(keymap-global-set "C-<next>"      'scroll-up-command)
+(keymap-global-set "M-<prior>"     'beginning-of-buffer)
+(keymap-global-set "M-<next>"      'end-of-buffer)
 
-(keymap-global-set "C-q q"   'switch-to-buffer)
-(keymap-global-set "C-q C-q" 'buffer-menu)
-(keymap-global-set "C-q C-f" 'find-file)
-(keymap-global-set "C-q b"   'switch-to-buffer)
-(keymap-global-set "C-q C-b" 'switch-to-buffer)
-(keymap-global-set "C-q h"   'previous-buffer)
-(keymap-global-set "C-q j"   'other-window)
-(keymap-global-set "C-q k"   'my/other-window-1)
-(keymap-global-set "C-q l"   'next-buffer)
+(keymap-global-set   "S-<prior>"   'my/scroll-half-down-other-window)
+(keymap-global-set   "S-<next>"    'my/scroll-half-up-other-window)
+(keymap-global-set "C-S-<prior>"   'scroll-other-window-down)
+(keymap-global-set "C-S-<next>"    'scroll-other-window)
+(keymap-global-set "M-S-<prior>"   'beginning-of-buffer-other-window)
+(keymap-global-set "M-S-<next>"    'end-of-buffer-other-window)
 
-(keymap-global-set "C-q SPC"   'rectangle-mark-mode)
-(keymap-global-set "C-q C-SPC" 'rectangle-mark-mode)
 
-(keymap-global-set "C-q C-t" 'tabify)
-(keymap-global-set "C-q t"   'untabify)
+(keymap-global-set "C-z C-z" 'suspend-emacs)
 
-(keymap-global-set "C-q C-w" 'whitespace-mode)
-(keymap-global-set "C-q C-e" 'read-only-mode)
-(keymap-global-set "C-q C-o" 'overwrite-mode)
-(keymap-global-set "C-q C-r" 'replace-string)
-(keymap-global-set "C-q C-s" 'string-rectangle)
-(keymap-global-set "C-q C-v" 'visual-line-mode)
-(keymap-global-set "C-q C-a" 'org-agenda)
-(keymap-global-set "C-q C-p" 'org-toggle-inline-images)
-(keymap-global-set "C-q C-n" 'my/toggle-line-numbers)
 
-(keymap-global-set "C-q y"   'winner-redo)
-(keymap-global-set "C-q C-y" 'winner-undo)
+(keymap-global-set "C-q ,"   'rename-buffer)
+(keymap-global-set "C-q r"   'revert-buffer)
+(keymap-global-set "C-q k"   'kill-current-buffer)
+
+(keymap-global-set "C-q t"   'load-theme)
+(keymap-global-set "C-q C-t" 'my/disable-all-themes)
 
 (keymap-global-set "C-q ,"   'my/save-window-layout)
 (keymap-global-set "C-q ."   'my/restore-window-layout)
 (keymap-global-set "C-q /"   'my/list-window-layouts)
 (keymap-global-set "C-q `"   'my/delete-window-layout)
 
-(keymap-global-set "C-q ;"   'bookmark-jump)
-(keymap-global-set "C-q :"   'bookmark-set)
-(keymap-global-set "C-q \""  'bookmark-bmenu-list)
-
-(keymap-global-set "C-q x"   'my/spawn-st)
-(keymap-global-set "C-q X"   'shell)
-
-(keymap-global-set "C-q ["   'shell-command)
-(keymap-global-set "C-q ]"   'compile)
-(keymap-global-set "C-q C-]" 'recompile)
-
-(keymap-global-set "C-q '"   'quoted-insert)
-(keymap-global-set "C-q C-'" 'quoted-insert)
-
 (keymap-global-set "C-q <return>"   'my/start-process)
 (keymap-global-set "C-q C-<return>" 'my/launcher)
 (keymap-global-set "C-q S-<return>" 'my/spawn-st)
+
+
+(keymap-global-set "C-v C-v" 'buffer-menu)
+(keymap-global-set "C-v C-f" 'find-file)
+(keymap-global-set "C-v b"   'switch-to-buffer)
+(keymap-global-set "C-v C-b" 'list-buffers)
+(keymap-global-set "C-v h"   'winner-undo)
+(keymap-global-set "C-v j"   'next-buffer)
+(keymap-global-set "C-v C-j" 'other-window)
+(keymap-global-set "C-v k"   'previous-buffer)
+(keymap-global-set "C-v C-k" 'my/other-window-1)
+(keymap-global-set "C-v l"   'winner-redo)
+
+(keymap-global-set "C-v SPC"   'rectangle-mark-mode)
+(keymap-global-set "C-v C-SPC" 'rectangle-mark-mode)
+
+(keymap-global-set "C-v C-t" 'tabify)
+(keymap-global-set "C-v t"   'untabify)
+
+(keymap-global-set "C-v C-e" 'read-only-mode)
+(keymap-global-set "C-v C-n" 'my/toggle-line-numbers)
+(keymap-global-set "C-v C-w" 'whitespace-mode)
+(keymap-global-set "C-v RET" 'visual-line-mode)
+
+(keymap-global-set "C-v C-r" 'replace-string)
+(keymap-global-set "C-v C-s" 'string-rectangle)
+(keymap-global-set "C-v C-a" 'org-agenda)
+(keymap-global-set "C-v C-p" 'org-toggle-inline-images)
+
+(keymap-global-set "C-v ,"   'bookmark-jump)
+(keymap-global-set "C-v ."   'bookmark-set)
+(keymap-global-set "C-v /"   'bookmark-bmenu-list)
+
+(keymap-global-set "C-v C-," 'delete-other-windows)
+(keymap-global-set "C-v C-." 'split-window-below)
+(keymap-global-set "C-v C-_" 'split-window-right)
+(keymap-global-set "C-v C-;" 'delete-window)
+
+(keymap-global-set "C-v x"   'shell)
+(keymap-global-set "C-v C-x" 'shell)
+
+(keymap-global-set "C-v ["   'shell-command)
+(keymap-global-set "C-v ]"   'compile)
+(keymap-global-set "C-v C-]" 'recompile)
+
+(keymap-global-set "C-v '"   'quoted-insert)
+(keymap-global-set "C-v C-'" 'quoted-insert)
 
 
 (use-package color
@@ -391,12 +392,15 @@
       (set-fontset-font "fontset-default" 'han "Noto Sans CJK SC")
       (set-fontset-font "fontset-default" 'greek "Noto Sans Mono"))
 
+  (xterm-mouse-mode 1)
+  (setq mouse-drag-copy-region t)
+
   (unless (package-installed-p 'xclip)
     (package-refresh-contents)
     (package-install 'xclip))
   (xclip-mode 1)
   (setq select-enable-clipboard t)
-  (setq select-enable-primary t))
+  (setq select-enable-primary nil))
 
 (defconst my/csi-u-special-keys
   '((9 . tab) (13 . return) (27 . escape) (127 . backspace))
@@ -459,6 +463,8 @@ Shift is included only when SHIFT-OK is non-nil."
         (define-key map (format "\e[1;%d%c" mods final)
                     (vector (event-convert-list
                              (append (my/csi--mod-list mods t) (list key)))))))
+    ;; Shift-Tab: \e[Z (kcbt), which Emacs leaves undecoded
+    (define-key map "\e[Z" [backtab])
     ;; Tilde keys: \e[<n>~ and \e[<n>;<mod>~
     (pcase-dolist (`(,n . ,key) my/csi-tilde-keys)
       (define-key map (format "\e[%d~" n) (vector key))
@@ -473,6 +479,11 @@ Shift is included only when SHIFT-OK is non-nil."
   "Chain `my/csi-u-map' into this terminal's `input-decode-map'."
   (let ((map (copy-keymap my/csi-u-map)))
     (set-keymap-parent map (keymap-parent input-decode-map))
-    (set-keymap-parent input-decode-map map)))
+    (set-keymap-parent input-decode-map map))
+  ;; st's terminfo also lists Home and End as keypad keys (ka1, kc1), so
+  ;; Emacs binds them to kp-7 and kp-1 in `input-decode-map' itself,
+  ;; where they win over the parent map above.
+  (define-key input-decode-map "\e[1~" [home])
+  (define-key input-decode-map "\e[4~" [end]))
 
 (add-hook 'tty-setup-hook #'my/csi-u-install)

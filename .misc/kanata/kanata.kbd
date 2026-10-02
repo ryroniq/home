@@ -1,0 +1,61 @@
+(defcfg
+  process-unmapped-keys yes
+)
+
+(defhands
+  (left  q w e r t a z x c v b)
+  (right y u i o p [ ] ; ' n m , . /)
+)
+
+(defvar
+  tt   200  ;; hold threshold (ms)
+  idle 200  ;; typing streak: key pressed within this window => tap
+)
+
+(deftemplate hrm (tap hold)
+  (tap-hold-opposite-hand-release $tt $tap $hold
+    (same-hand tap)
+    (timeout hold)
+    (require-prior-idle $idle)
+    (tap-repress-timeout 200))
+)
+
+(defalias
+  sm (t! hrm s lalt)
+  dm (t! hrm d lctl)
+  fm (t! hrm f lsft)
+  gn (tap-hold 175 200 g (layer-while-held nav))
+
+  hm (t! hrm h rmet)
+  jm (t! hrm j rsft)
+  km (t! hrm k rctl)
+  lm (t! hrm l lalt)  ;; lalt, not ralt: ralt is often AltGr on Linux
+
+  spc (t! hrm spc lmet)
+
+  cap (tap-hold-press 200 200 esc lctl)
+)
+
+(defsrc
+  esc  1    2    3    4    5    6    7    8    9    0    -    =
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]
+  caps a    s    d    f    g    h    j    k    l    ;    '
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft
+                           spc
+)
+
+(deflayer base
+  grv  _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _
+  @cap _    @sm  @dm  @fm  @gn  _    @jm  @km  @lm  _    _
+  _    _    _    _    _    _    _    _    _    _    _    _
+                           @spc
+)
+
+(deflayer nav
+  _    f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
+  _    _    _    _    _    _    home pgup pgdn end  _    esc  _
+  _    _    _    _    _    _    left down up   right ret tab
+  _    _    _    _    _    ins  bspc del  _    _    comp _
+                           _
+)
