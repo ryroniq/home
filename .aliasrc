@@ -2,6 +2,7 @@ alias a=alias
 alias b=bindkey
 alias c=clear
 alias d=date
+alias e='emacs -nw'
 alias f=fg
 alias g='grep --color=always'
 alias h=history
