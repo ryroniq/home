@@ -1,5 +1,4 @@
 set nocompatible
-
 set background=dark
 
 syntax on
@@ -13,13 +12,6 @@ set nobackup
 set noundofile
 set timeoutlen=1000 ttimeoutlen=0
 
-" Vim doesn't know st or tmux support modifyOtherKeys
-set keyprotocol^=st:mok2,tmux:mok2
-" st's Shift-Tab isn't read from terminfo
-if &term =~# '^st'
-    execute "set t_kB=\<Esc>[Z"
-endif
-
 set shiftwidth=4
 set softtabstop=4
 set tabstop=4
@@ -32,6 +24,13 @@ set nonumber
 set nolist
 set listchars=tab:>-,space:·
 
+" Vim doesn't know st or tmux support modifyOtherKeys
+set keyprotocol^=st:mok2,tmux:mok2
+" st's Shift-Tab isn't read from terminfo
+if &term =~# '^st'
+    execute "set t_kB=\<Esc>[Z"
+endif
+
 autocmd BufEnter * silent! cd %:p:h
 autocmd Filetype haskell setlocal tabstop=2 shiftwidth=2 softtabstop=2
 
@@ -40,6 +39,7 @@ let g:nogx = "true"
 set rulerformat=%38(%#TabLine#\ %-t\ %m\ %#MatchParen#\ %12(%l:%c%V%)\ %k\ %4p%%%)
 highlight LineNr term=bold cterm=NONE ctermfg=DarkGrey ctermbg=NONE gui=NONE guifg=DarkGrey guibg=NONE
 highlight LineNr guifg=#405460
+
 
 let mapleader = "\\"
 
