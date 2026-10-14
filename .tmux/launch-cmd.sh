@@ -7,6 +7,7 @@ htop
 btop
 python
 git log
+lazygit
 EOF
 )
 

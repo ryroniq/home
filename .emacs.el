@@ -213,9 +213,11 @@
 
 
 (keymap-global-unset "C-x C-z")
-(keymap-global-unset "C-q")
-(keymap-global-unset "C-z")
-(keymap-global-unset "C-v")
+(keymap-global-unset "C-h" t)
+(keymap-global-unset "C-j" t)
+(keymap-global-unset "C-q" t)
+(keymap-global-unset "C-z" t)
+(keymap-global-unset "C-v" t)
 (keymap-global-unset "C-M-v")
 (keymap-global-unset "C-M-S-v")
 
@@ -225,8 +227,8 @@
 
 (keymap-global-set "C-;" 'other-window)
 (keymap-global-set "C-'" 'my/other-window-1)
-(keymap-global-set "C-(" 'my/transpose-line-backward)
-(keymap-global-set "C-)" 'my/transpose-line-forward)
+(keymap-global-set "M-<up>"   'my/transpose-line-backward)
+(keymap-global-set "M-<down>" 'my/transpose-line-forward)
 
 (keymap-global-set "M-L" 'mark-word)
 (keymap-global-set "M-n" 'forward-paragraph)
@@ -239,6 +241,8 @@
 (keymap-global-set "C-M-;"   'kill-sexp)
 (keymap-global-set "C-M-'"   'backward-kill-sexp)
 
+(keymap-global-set "C-<tab>"   'other-window)
+(keymap-global-set "<backtab>" 'my/other-window-1)
 
 (keymap-global-set "<delete>"      'delete-char)
 (keymap-global-set "M-<backspace>" 'backward-kill-word)
@@ -259,71 +263,98 @@
 (keymap-global-set "M-S-<next>"    'end-of-buffer-other-window)
 
 
-(keymap-global-set "C-z C-z" 'suspend-emacs)
+(keymap-global-set "C-v" help-map)
 
 
-(keymap-global-set "C-q ,"   'rename-buffer)
-(keymap-global-set "C-q r"   'revert-buffer)
-(keymap-global-set "C-q k"   'kill-current-buffer)
-
-(keymap-global-set "C-q t"   'load-theme)
-(keymap-global-set "C-q C-t" 'my/disable-all-themes)
-
-(keymap-global-set "C-q ,"   'my/save-window-layout)
-(keymap-global-set "C-q ."   'my/restore-window-layout)
-(keymap-global-set "C-q /"   'my/list-window-layouts)
-(keymap-global-set "C-q `"   'my/delete-window-layout)
-
-(keymap-global-set "C-q <return>"   'my/start-process)
-(keymap-global-set "C-q C-<return>" 'my/launcher)
-(keymap-global-set "C-q S-<return>" 'my/spawn-st)
+(defvar my-prefix-key-1 "C-j")
+(defvar my-prefix-key-2 "C-q")
+(defvar my-prefix-key-3 "C-z")
 
 
-(keymap-global-set "C-v C-v" 'buffer-menu)
-(keymap-global-set "C-v C-f" 'find-file)
-(keymap-global-set "C-v b"   'switch-to-buffer)
-(keymap-global-set "C-v C-b" 'list-buffers)
-(keymap-global-set "C-v h"   'winner-undo)
-(keymap-global-set "C-v j"   'next-buffer)
-(keymap-global-set "C-v C-j" 'other-window)
-(keymap-global-set "C-v k"   'previous-buffer)
-(keymap-global-set "C-v C-k" 'my/other-window-1)
-(keymap-global-set "C-v l"   'winner-redo)
+(defvar-keymap my-prefix-map-1 
+  ;; buffer
+  "C-j" #'buffer-menu
+  "C-f" #'find-file
+  "b"   #'switch-to-buffer
+  "C-b" #'list-buffers
+  "C-r" #'rename-buffer
+  "C-v" #'revert-buffer
+  "C-k" #'kill-current-buffer
 
-(keymap-global-set "C-v SPC"   'rectangle-mark-mode)
-(keymap-global-set "C-v C-SPC" 'rectangle-mark-mode)
+  ;; theme
+  "t"   #'load-theme
+  "C-t" #'my/disable-all-themes
 
-(keymap-global-set "C-v C-t" 'tabify)
-(keymap-global-set "C-v t"   'untabify)
+  ;; bookmarks
+  "C-," #'bookmark-jump
+  "C-." #'bookmark-set
+  "C-_" #'bookmark-bmenu-list
 
-(keymap-global-set "C-v C-e" 'read-only-mode)
-(keymap-global-set "C-v C-n" 'my/toggle-line-numbers)
-(keymap-global-set "C-v C-w" 'whitespace-mode)
-(keymap-global-set "C-v RET" 'visual-line-mode)
+  ;; shell & compile
+  "x"     #'shell-command
+  "C-x"   #'shell
+  "C-;"   #'compile
+  "C-'"   #'recompile
 
-(keymap-global-set "C-v C-r" 'replace-string)
-(keymap-global-set "C-v C-s" 'string-rectangle)
-(keymap-global-set "C-v C-a" 'org-agenda)
-(keymap-global-set "C-v C-p" 'org-toggle-inline-images)
+  ;; launchers
+  "<RET>"   #'my/start-process
+  "C-<return>" #'my/launcher
+  "S-<return>" #'my/spawn-st)
 
-(keymap-global-set "C-v ,"   'bookmark-jump)
-(keymap-global-set "C-v ."   'bookmark-set)
-(keymap-global-set "C-v /"   'bookmark-bmenu-list)
+(keymap-global-set my-prefix-key-1 my-prefix-map-1)
 
-(keymap-global-set "C-v C-," 'delete-other-windows)
-(keymap-global-set "C-v C-." 'split-window-below)
-(keymap-global-set "C-v C-_" 'split-window-right)
-(keymap-global-set "C-v C-;" 'delete-window)
 
-(keymap-global-set "C-v x"   'shell)
-(keymap-global-set "C-v C-x" 'shell)
+(defvar-keymap my-prefix-map-2
+  ;; navigation
+  "C-u"   #'winner-undo
+  "C-h"   #'next-buffer
+  "C-j"   #'other-window
+  "C-k"   #'my/other-window-1
+  "C-l"   #'previous-buffer
+  "C-i"   #'winner-redo
 
-(keymap-global-set "C-v ["   'shell-command)
-(keymap-global-set "C-v ]"   'compile)
-(keymap-global-set "C-v C-]" 'recompile)
+  ;; rectangles
+  "SPC"   #'rectangle-mark-mode
+  "C-SPC" #'rectangle-mark-mode
 
-(keymap-global-set "C-v '"   'quoted-insert)
-(keymap-global-set "C-v C-'" 'quoted-insert)
+  ;; tabs
+  "C-t"   #'tabify
+  "t"     #'untabify
+
+  ;; toggles
+  "C-q"   #'read-only-mode
+  "C-n"   #'my/toggle-line-numbers
+  "C-w"   #'whitespace-mode
+  "C-v"   #'visual-line-mode
+
+  ;; editing & org
+  "C-c"   #'replace-string
+  "C-s"   #'string-rectangle
+  "C-a"   #'org-agenda
+
+  ;; windows
+  "C-,"   #'delete-other-windows
+  "C-."   #'split-window-below
+  "C-_"   #'split-window-right
+  "C-;"   #'delete-window
+
+  ;; misc
+  "'"     #'quoted-insert)
+
+(keymap-global-set my-prefix-key-2 my-prefix-map-2)
+
+
+(defvar-keymap my-prefix-map-3
+  "C-z"  #'suspend-emacs)
+
+(keymap-global-set my-prefix-key-3 my-prefix-map-3)
+
+
+(defvar-keymap my-lisp-interaction-map
+  :parent my-prefix-map-1
+  "C-e" #'eval-print-last-sexp)
+(with-eval-after-load 'elisp-mode
+  (keymap-set lisp-interaction-mode-map my-prefix-key-1 my-lisp-interaction-map))
 
 
 (use-package color
@@ -349,8 +380,9 @@
   :init
   (setq magit-define-global-key-bindings 'recommended)
   :bind
-  ("C-x g" . magit-status)
-  ("C-q g" . magit-status))
+  (("C-x g" . magit-status)
+   :map my-prefix-map-1
+   ("g" . magit-status)))
 
 
 (use-package mu4e
@@ -372,7 +404,8 @@
                 (my/mu4e-init)
                 (apply orig-fun args)))
   :bind
-  ("C-q m" . mu4e))
+  (:map my-prefix-map-1
+        ("m" . mu4e)))
 
 
 
@@ -382,7 +415,8 @@
   (setq notmuch-show-logo nil
         notmuch-hello-thousands-separator ",")
   :bind
-  ("C-q n" . notmuch))
+  (:map my-prefix-map-1
+        (("n" . notmuch) )))
 
 
 (if (display-graphic-p)
