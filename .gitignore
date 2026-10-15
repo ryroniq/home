@@ -1,3 +1,7 @@
+/[A-Za-z0-9]*
+!/LICENSE
+!/README.md
+
 *~
 \#*\#
 .*_history
@@ -27,6 +31,7 @@
 .mozilla
 .netrc*
 .notmuch-config
+.npm
 .password-store
 .pki
 .ssh
@@ -34,16 +39,9 @@
 .var
 .vim
 .viminfo
+.vnc
 .wget-hsts
 .Xauthority
 .xinitrc.env
 .xinitrc.wm
 .zcompdump
-Downloads
-Jts
-Maildir
-data
-git
-go
-proj
-storage
