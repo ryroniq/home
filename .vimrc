@@ -63,19 +63,22 @@ nnoremap <C-S-down>  <C-w>J
 nnoremap <C-S-up>    <C-w>K
 nnoremap <C-S-right> <C-w>L
 
-nnoremap Q :marks<CR>
+nnoremap Q @@
 nnoremap _ <C-w>s
 nnoremap \| <C-w>v
 
+nnoremap <C-`> :marks<cr>
+nnoremap <C-'> :marks<cr>
+nnoremap <C-;> :jumps<CR>
+nnoremap <C-/> :reg<CR>
 nnoremap <C-f> :e<space>
-nnoremap <C-g> :jumps<CR>
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 nnoremap <C-n> :cnext<CR>
 nnoremap <C-p> :cprev<CR>
-nnoremap <C-q> :reg<CR>
+nnoremap <C-q> @
 
 nnoremap <leader>o :tabonly<CR>
 nnoremap <leader>p :pwd<CR>
