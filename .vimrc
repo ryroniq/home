@@ -33,6 +33,7 @@ endif
 
 autocmd BufEnter * silent! cd %:p:h
 autocmd Filetype haskell setlocal tabstop=2 shiftwidth=2 softtabstop=2
+autocmd BufRead,BufNewFile *.journal setlocal expandtab shiftwidth=4 softtabstop=4 nosmartindent
 
 let g:nogx = "true"
 
