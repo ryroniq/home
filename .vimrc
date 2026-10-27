@@ -12,9 +12,10 @@ set nobackup
 set noundofile
 set timeoutlen=1000 ttimeoutlen=0
 
-set shiftwidth=4
-set softtabstop=4
+set expandtab
 set tabstop=4
+set shiftwidth=0
+set softtabstop=-1
 set autoindent
 set smartindent
 
@@ -41,6 +42,7 @@ set rulerformat=%38(%#TabLine#\ %-t\ %m\ %#MatchParen#\ %12(%l:%c%V%)\ %k\ %4p%%
 highlight LineNr term=bold cterm=NONE ctermfg=DarkGrey ctermbg=NONE gui=NONE guifg=DarkGrey guibg=NONE
 highlight LineNr guifg=#405460
 
+command! -range=% Retab execute <line1> . ',' . <line2> . (&expandtab ? 'retab' : 'retab!')
 
 let mapleader = "\\"
 
@@ -81,6 +83,8 @@ nnoremap <C-n> :cnext<CR>
 nnoremap <C-p> :cprev<CR>
 nnoremap <C-q> @
 
+nnoremap <leader><tab> :set expandtab!<CR>
+nnoremap <leader>t :Retab<CR>
 nnoremap <leader>o :tabonly<CR>
 nnoremap <leader>p :pwd<CR>
 nnoremap <leader>q :q<CR>
