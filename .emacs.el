@@ -288,6 +288,7 @@
   ;; bookmarks
   "C-," #'bookmark-jump
   "C-." #'bookmark-set
+  "C-/" #'bookmark-bmenu-list
   "C-_" #'bookmark-bmenu-list
 
   ;; shell & compile
@@ -335,6 +336,7 @@
   ;; windows
   "C-,"   #'delete-other-windows
   "C-."   #'split-window-below
+  "C-/"   #'split-window-right
   "C-_"   #'split-window-right
   "C-;"   #'delete-window
 
