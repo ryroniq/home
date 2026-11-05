@@ -16,20 +16,17 @@
 )
 
 (defsrc
-  esc  1    2    3    4    5    6    7    8    9    0    -    =    bspc
-       q    w    e    r    t    y    u    i    o    p    [    ]    \
+       1    2    3    4    5    6    7    8    9    0    -    =
+       q    w    e    r    t    y    u    i    o    p
   caps a    s    d    f    g    h    j    k    l    ;    '
-       z    x    c    v    b    n    m    ,    .    /         up
-  lctl                     spc            ralt      rctl left down right
+       z    x    c    v    b    n    m    ,    .    /
+  lctl                     spc            ralt      rctl
 )
 
 (defalias
-  2qw (layer-switch qwerty)
-  2q1 (layer-switch q1)
-  2ga (layer-switch gallium)
-
-  cap (tap-hold-press 200 200 esc lctl)
-  spc (tap-hold 200 200 spc (layer-toggle nav))
+  ls-q1 (layer-switch q1)
+  ls-q2 (layer-switch q2)
+  ls-ry (layer-switch ry)
 
   am (tap-hold-release-keys 200 200 a lalt $left-hand-keys)
   sm (tap-hold-release-keys 200 200 s lmet $left-hand-keys)
@@ -37,37 +34,47 @@
   ;m (tap-hold-release-keys 200 200 ; lalt $right-hand-keys)
 )
 
+(defalias
+  cap (tap-hold-press 200 200 esc lctl)
+  spc (tap-hold 200 200 spc (layer-toggle nav))
+
+  pls (unicode "+")
+  ast (unicode "*")
+  lp  (unicode "(")
+  rp  (unicode ")")
+)
+
 ;; QWERTY
-(deflayer qwerty
-  _    lsft lctl lalt lmet menu menu rmet lalt rctl rsft _    _    _
-       _    _    _    _    _    _    _    _    _    _    _    _    _
-  @cap _    _    _    _    _    _    _    _    _    ;    _
-       _    _    _    _    _    _    _    _    _    _         XX
-  XX                       @spc           @2q1      @2ga XX   XX   XX
-)
-
 (deflayer q1
-  _    _    _    _    _    _    _    _    _    _    _    _    _    _
-       _    _    _    _    _    _    _    _    _    _    _    _    _
-  @cap @am  @sm  _    _    _    _    _    _    @lm  @;m  _
-       _    _    _    _    _    _    _    _    _    _         XX
-  @2qw                     @spc           _           @2ga XX   XX   XX
+       f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  _    _
+       _    _    _    _    _    _    _    _    _    _
+  @cap _    _    _    _    _    _    _    _    _    _    _
+       _    _    _    _    _    _    _    _    _    _
+  @ls-q1                   @spc           @ls-q2    @ls-ry
 )
 
-;; Gallium (bkj custom)
-(deflayer gallium
-  _    lsft lctl lalt lmet menu menu rmet lalt rctl rsft _    _    _
-       j    l    d    c    v    k    f    o    u    ;    _    _    _
-  @cap n    r    t    s    g    y    h    a    e    i    _
-       x    q    m    w    z    b    p    _    _    _         XX
-  @2qw                     @spc           @2q1      XX   XX   XX   XX
+(deflayer q2
+       _    _    _    _    _    _    _    _    _    _    _    _
+       _    _    _    _    _    _    _    _    _    _
+  @cap @am  @sm  _    _    _    _    _    _    @lm  @;m  _
+       _    _    _    _    _    _    _    _    _    _
+  @ls-q1                   @spc           @ls-q2    @ls-ry
+)
+
+;; Ryroniq (Gallium based kanata layout)
+(deflayer ry
+       f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  _    _
+       j    l    d    c    v    k    f    o    u    q
+  @cap n    r    s    t    g    y    h    a    e    i    _
+       ;    x    m    w    z    b    p    ,    .    /
+  @ls-q1                   @spc           @ls-q2    @ls-ry
 )
 
 ;; Navigation
 (deflayer nav
-  _    f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12  _
-       1    2    3    4    5    home pgup pgdn end  XX   _    _    _
-  @cap 6    7    8    9    0    left down up  right -    =
-       menu menu \    [    ]    bspc del  ins  XX   grv       XX
-  XX                       _              XX        XX   XX   XX   XX
+       -    7    8    9    /    menu rmet ralt rctl rsft f11  f12
+       @pls 4    5    6    @ast home pgup pgdn end  \
+  @cap 0    1    2    3    .    left down up  right -    =
+       @lp  @rp  =    ,    spc  bspc del  ins  spc  grv
+  XX                       _              XX        XX
 )
