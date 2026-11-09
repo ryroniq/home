@@ -44,7 +44,27 @@ highlight LineNr guifg=#405460
 
 command! -range=% Retab execute <line1> . ',' . <line2> . (&expandtab ? 'retab' : 'retab!')
 
-let mapleader = "\\"
+let s:keys = {
+  \ 'y': 'h', 'h': 'j', 'a': 'k', 'e': 'l', 'j': 'q', 'l': 'z',
+  \ 's': 'a', 'm': 'e', 'z': 'm', 'k': 'y', 'q': ':',
+  \ 'Y': 'H', 'H': 'J', 'A': 'K', 'E': 'L', 'J': 'Q', 'L': 'Z',
+  \ 'S': 'A', 'M': 'E', 'Z': 'M', 'K': 'Y', 'Q': ';',
+  \ ';': ':', ':': ';',
+  \ }
+for [s:lhs, s:rhs] in items(s:keys)
+  for s:mode in ['n', 'x', 'o']
+    execute s:mode . 'noremap' s:lhs s:rhs
+  endfor
+endfor
+
+for s:k in ['h', 'j', 'k', 'l', 'H', 'J', 'K', 'L', '<C-h>', '<C-j>', '<C-k>', '<C-l>']
+  execute 'nnoremap <C-w>' . s:k . ' <Nop>'
+endfor
+
+nnoremap gh gj
+nnoremap ga gk
+xnoremap gh gj
+xnoremap ga gk
 
 nnoremap <C-left>  <C-w><
 nnoremap <C-down>  <C-w>+
@@ -70,31 +90,22 @@ nnoremap Q @@
 nnoremap _ <C-w>s
 nnoremap \| <C-w>v
 
-nnoremap <C-`> :marks<cr>
-nnoremap <C-'> :marks<cr>
-nnoremap <C-;> :jumps<CR>
+nnoremap <C-j> @
+nnoremap <C-q> :q<CR>
+nnoremap <C-s> :w<CR>
+nnoremap <C-c> :shell<CR>
+nnoremap <C-`> :marks<CR>
+nnoremap <C-'> :marks<CR>
+nnoremap <C-i> :jumps<CR>
 nnoremap <C-/> :reg<CR>
-nnoremap <C-f> :e<space>
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
+nnoremap <C-f> <C-i>
+nnoremap <C-m> <C-a>
+nnoremap <C-y> <C-w>h
+nnoremap <C-h> <C-w>j
+nnoremap <C-a> <C-w>k
+nnoremap <C-e> <C-w>l
 nnoremap <C-n> :cnext<CR>
 nnoremap <C-p> :cprev<CR>
-nnoremap <C-q> @
-
-nnoremap <leader><tab> :set expandtab!<CR>
-nnoremap <leader>t :Retab<CR>
-nnoremap <leader>o :tabonly<CR>
-nnoremap <leader>p :pwd<CR>
-nnoremap <leader>q :q<CR>
-nnoremap <leader>/ :set hlsearch!<CR>
-nnoremap <leader>' :set list!<CR>
-nnoremap <leader>; :set number!<CR>
-nnoremap <leader>- :tabclose<CR>
-nnoremap <leader>= :tabnew<CR>
-nnoremap <leader>[ :tabprev<CR>
-nnoremap <leader>] :tabnext<CR>
 
 nnoremap <C-b><C-a> :badd<space>
 nnoremap <C-b><C-b> :b<space>
@@ -105,9 +116,27 @@ nnoremap <C-b><C-l> :buffers<CR>
 nnoremap <C-b><C-n> :bnext<CR>
 nnoremap <C-b><C-p> :bprev<CR>
 
-cnoremap <C-x> <C-k>
-cnoremap <C-j> <Down>
-cnoremap <C-k> <Up>
+nnoremap <C-w><C-y> <C-w>H
+nnoremap <C-w><C-h> <C-w>J
+nnoremap <C-w><C-a> <C-w>K
+nnoremap <C-w><C-e> <C-w>L
+
+let mapleader = "\\"
+
+nnoremap <leader><tab> :set expandtab!<CR>
+nnoremap <leader>t :Retab<CR>
+nnoremap <leader>o :tabonly<CR>
+nnoremap <leader>p :pwd<CR>
+nnoremap <leader>i :set number!<CR>
+nnoremap <leader>' :set list!<CR>
+nnoremap <leader>- :tabclose<CR>
+nnoremap <leader>= :tabnew<CR>
+nnoremap <leader>[ :tabprev<CR>
+nnoremap <leader>] :tabnext<CR>
+nnoremap <leader>/ :set hlsearch!<CR>
+
+cnoremap <C-h> <Down>
+cnoremap <C-a> <Up>
 
 if filereadable("/etc/vimrc.local")
     source /etc/vimrc.local

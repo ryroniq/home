@@ -225,8 +225,8 @@
 (keymap-global-set "<f1>" 'my/spawn-st)
 (keymap-global-set "<f2>" 'shell)
 
-(keymap-global-set "C-;" 'other-window)
-(keymap-global-set "C-'" 'my/other-window-1)
+(keymap-global-set "C-," 'other-window)
+(keymap-global-set "C-." 'my/other-window-1)
 (keymap-global-set "M-<up>"   'my/transpose-line-backward)
 (keymap-global-set "M-<down>" 'my/transpose-line-forward)
 
@@ -267,13 +267,13 @@
 
 
 (defvar my-prefix-key-1 "C-j")
-(defvar my-prefix-key-2 "C-q")
-(defvar my-prefix-key-3 "C-z")
+(defvar my-prefix-key-2 "C-h")
+(defvar my-prefix-key-3 "C-q")
 
-
+;; general commands
 (defvar-keymap my-prefix-map-1 
   ;; buffer
-  "C-j" #'buffer-menu
+  my-prefix-key-1 #'buffer-menu
   "C-f" #'find-file
   "b"   #'switch-to-buffer
   "C-b" #'list-buffers
@@ -285,6 +285,9 @@
   "t"   #'load-theme
   "C-t" #'my/disable-all-themes
 
+  ;; org
+  "C-a"   #'org-agenda
+
   ;; bookmarks
   "C-," #'bookmark-jump
   "C-." #'bookmark-set
@@ -294,7 +297,7 @@
   ;; shell & compile
   "x"     #'shell-command
   "C-x"   #'shell
-  "C-;"   #'compile
+  "'"     #'compile
   "C-'"   #'recompile
 
   ;; launchers
@@ -302,17 +305,13 @@
   "C-<return>" #'my/launcher
   "S-<return>" #'my/spawn-st)
 
-(keymap-global-set my-prefix-key-1 my-prefix-map-1)
-
-
+;; window & edit commands
 (defvar-keymap my-prefix-map-2
   ;; navigation
-  "C-u"   #'winner-undo
+  "C-y"   #'winner-undo
   "C-h"   #'next-buffer
-  "C-j"   #'other-window
-  "C-k"   #'my/other-window-1
-  "C-l"   #'previous-buffer
-  "C-i"   #'winner-redo
+  "C-a"   #'previous-buffer
+  "C-e"   #'winner-redo
 
   ;; rectangles
   "SPC"   #'rectangle-mark-mode
@@ -323,19 +322,18 @@
   "t"     #'untabify
 
   ;; toggles
-  "C-q"   #'read-only-mode
+  my-prefix-key-1 #'read-only-mode
   "C-n"   #'my/toggle-line-numbers
   "C-w"   #'whitespace-mode
   "C-v"   #'visual-line-mode
 
-  ;; editing & org
-  "C-c"   #'replace-string
+  ;; editing
+  "C-r"   #'replace-string
   "C-s"   #'string-rectangle
-  "C-a"   #'org-agenda
 
   ;; windows
-  "C-,"   #'delete-other-windows
-  "C-."   #'split-window-below
+  "C-,"   #'split-window-below
+  "C-."   #'delete-other-windows
   "C-/"   #'split-window-right
   "C-_"   #'split-window-right
   "C-;"   #'delete-window
@@ -343,12 +341,13 @@
   ;; misc
   "'"     #'quoted-insert)
 
-(keymap-global-set my-prefix-key-2 my-prefix-map-2)
-
-
+;; infrequent commands
 (defvar-keymap my-prefix-map-3
-  "C-z"  #'suspend-emacs)
+  my-prefix-key-3  #'suspend-emacs)
 
+
+(keymap-global-set my-prefix-key-1 my-prefix-map-1)
+(keymap-global-set my-prefix-key-2 my-prefix-map-2)
 (keymap-global-set my-prefix-key-3 my-prefix-map-3)
 
 
@@ -376,6 +375,10 @@
      `(whitespace-space-before-tab       ((t (:foreground ,ws-color))))
      `(whitespace-tab                    ((t (:foreground ,ws-color))))
      `(whitespace-trailing               ((t (:foreground ,ws-color)))))))
+
+
+(with-eval-after-load 'org
+  (keymap-set org-mode-map my-prefix-key-1 my-prefix-map-1))
 
 
 (use-package magit

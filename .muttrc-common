@@ -29,40 +29,59 @@ set status_format = "─%r─Mutt: %f [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?
 set date_format   = "%y-%m-%d %T"
 set index_format  = "%3C | %Z [%d] %-30.30F (%-4.4c) %s"
 
-bind index,pager,attach x noop
-bind index,pager,attach p noop
 bind index \Cc quit
+bind index "#" noop
+bind index q   noop
 
-bind pager j next-line
-bind pager k previous-line
-bind attach,index,pager \CD next-page
-bind attach,index,pager \CU previous-page
-bind pager g top
-bind pager G bottom
+bind attach,browser,generic,index,pager j noop
+bind attach,browser,generic,index,pager k noop
+bind attach,browser,generic,index,pager J noop
+bind attach,browser,generic,index,pager K noop
+
+bind attach,index,pager x   noop
+bind attach,index,pager p   noop
+bind attach,index,pager b   display-toggle-weed
+bind attach,index,pager B   bounce-message
+bind attach,index,pager \Cy previous-page
+bind attach,index,pager \Ce next-page
 bind attach,index,browser g first-entry
 bind attach,index,browser G last-entry
+bind attach,index,pager R   group-reply
+bind attach,index,pager \CR group-chat-reply
 
-bind index "#" noop
-bind index q noop
+bind index,pager H   next-entry
+bind index,pager A   previous-entry
+bind index,pager N   search-opposite
+bind index,pager \Ca half-up
+bind index,pager \Ch half-down
+bind index,pager e   view-attachments
 
+bind attach,browser i exit
+bind attach,browser h next-entry
+bind attach,browser a previous-entry
+
+bind index h next-undeleted
+bind index a previous-undeleted
+bind index i display-message
+
+bind pager g top
+bind pager G bottom
 bind pager [ half-up
 bind pager ] half-down
+bind pager h next-line
+bind pager a previous-line
 
-bind compose Y send-message
+bind browser y toggle-mailboxes
+
+bind compose K send-message
 bind compose y noop
 bind compose F edit-from
 bind compose <Esc>f noop
 
 bind compose p postpone-message
 bind index   p recall-message
-
-bind attach,index,pager R   group-reply
-bind attach,index,pager \CR group-chat-reply
-
-bind attach p pipe-entry
+bind attach  p pipe-entry
 macro attach P "<pipe-entry>gunzip -c | xmllint --format - | less<enter>"
-
-bind index,pager N search-opposite
 
 set beep_new = yes
 
