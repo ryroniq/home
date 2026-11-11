@@ -6,7 +6,9 @@
 \#*\#
 .*_history
 .*.local
+.*.log
 .anthy
+.aws
 .bash*
 .bin
 .bitcoin
@@ -31,6 +33,7 @@
 .local
 .log
 .mozilla
+.msmtprc
 .netrc*
 .notmuch-config
 .npm

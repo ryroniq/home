@@ -94,3 +94,6 @@ alias sal='ssh-add -l'
 
 alias trim="tr -d '\n'"
 alias show-cursor='printf "\033[?25h"'
+
+alias aws-profile-default='export AWS_PROFILE=default'
+alias aws-profile-files='export AWS_PROFILE=files'

@@ -1,2 +1,3 @@
 source ~/.muttrc-common
 source ~/.muttrc-default
+source `f=~/.muttrc.local; [ -f "$f" ] && echo "$f" || echo /dev/null`
