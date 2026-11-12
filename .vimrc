@@ -11,6 +11,7 @@ set incsearch
 set nobackup
 set noundofile
 set timeoutlen=1000 ttimeoutlen=0
+set scrolloff=5
 
 set expandtab
 set tabstop=4
@@ -43,6 +44,14 @@ highlight LineNr term=bold cterm=NONE ctermfg=DarkGrey ctermbg=NONE gui=NONE gui
 highlight LineNr guifg=#405460
 
 command! -range=% Retab execute <line1> . ',' . <line2> . (&expandtab ? 'retab' : 'retab!')
+
+augroup restore_cursor
+  autocmd!
+  autocmd BufReadPost *
+    \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
+    \ |   exe "normal! g`\""
+    \ | endif
+augroup END
 
 let s:keys = {
   \ 'y': 'h', 'h': 'j', 'a': 'k', 'e': 'l', 'j': 'q', 'l': 'z',
