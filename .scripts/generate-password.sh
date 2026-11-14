@@ -6,7 +6,7 @@ if [ "$#" -gt 2 ]; then
 fi
 
 length="${1:-30}"
-charset="${2:-A-Za-z0-9@_!#%.,;+-}"
+charset="${2:-A-Za-z0-9_!#$%^&*.,;+-}"
 count=10
 
 case "$length" in
