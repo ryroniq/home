@@ -19,6 +19,7 @@
 .claude.json
 .claude
 .config
+.diary
 .dbus
 .electrum
 .emacs.d
