@@ -25,7 +25,7 @@ alias ta='tmux attach'
 alias tl='tmux ls'
 
 alias mk=make
-alias py=python
+alias py=python3
 
 alias c3='cal -3'
 alias ct='column -t'

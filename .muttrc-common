@@ -55,6 +55,7 @@ bind index,pager N   search-opposite
 bind index,pager \Ca half-up
 bind index,pager \Ch half-down
 bind index,pager e   view-attachments
+bind index,pager E   edit
 
 bind attach,browser i exit
 bind attach,browser h next-entry
