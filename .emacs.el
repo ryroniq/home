@@ -42,11 +42,6 @@
   (setq indent-tabs-mode t))
 (add-hook 'c-mode-common-hook 'my/c-mode-common-hook)
 
-(defun my/org-mode-hook ()
-  (define-key org-mode-map (kbd "C-,") 'my/scroll-half-down)
-)
-(add-hook 'org-mode-hook 'my/org-mode-hook)
-
 (defun my/set-mark-only ()
   "Set a mark at point without activating the region highlight."
   (interactive)
@@ -118,18 +113,6 @@
   (interactive)
   (start-process "Terminal" nil "st"))
 
-(defun my/date-add-day (date days)
-  (format-time-string
-   "%Y-%m-%d"
-   (time-add (date-to-time date)
-             (days-to-time days))))
-
-(defun my/date-add-day-current (days)
-  (format-time-string
-   "%Y-%m-%d"
-   (time-add (current-time)
-             (days-to-time days))))
-
 (defun my/x-selection-to-emacs ()
   "Paste text from the X selection into the Emacs buffer."
   (interactive)
@@ -156,63 +139,13 @@
             (start-process-shell-command cmd nil (concat cmdpath " " args))))
       (message (format "Command \"%s\" doesn't exist in launcher list." cmd)))))
 
-(defvar my/window-layouts-alist nil "Alist of named window layouts.")
-
-(defun my/save-window-layout (name)
-  "Save the current window layout with a given NAME."
-  (interactive (list (completing-read "Save window layout: " (mapcar 'car my/window-layouts-alist) nil nil)))
-  (let ((layout (current-window-configuration))
-        (point (point)))
-    (my/delete-window-layout name)
-    (push (cons name (list layout point)) my/window-layouts-alist)
-    (message "Layout '%s' saved." name)))
-
-(defun my/restore-window-layout (name)
-  "Restore the window layout associated with NAME."
-  (interactive (list (completing-read "Restore window layout: " (mapcar 'car my/window-layouts-alist))))
-  (let ((layout-and-point (cdr (assoc name my/window-layouts-alist))))
-    (if layout-and-point
-        (progn
-          (set-window-configuration (car layout-and-point))
-          (goto-char (cadr layout-and-point))
-          (message "Layout '%s' restored." name))
-      (message "No layout found with the name '%s'." name))))
-
-(defun my/list-window-layouts ()
-  "List all saved window layouts."
-  (interactive)
-  (if my/window-layouts-alist
-      (message "Saved window layouts: %s" (mapconcat 'car my/window-layouts-alist ", "))
-    (message "No layouts saved.")))
-
-(defun my/clear-window-layouts ()
-  "Clear all saved window layouts."
-  (interactive)
-  (setq my/window-layouts-alist nil)
-  (message "All window layouts cleared."))
-
-(defun my/delete-window-layout (name)
-  "Delete all window layouts associated with NAME."
-  (interactive (list (completing-read "Choose Layout to Delete: " (mapcar 'car my/window-layouts-alist))))
-  (let ((orig-length (length my/window-layouts-alist)))
-    (setq my/window-layouts-alist
-          (delq nil (mapcar
-                     (lambda (pair) (unless (equal (car pair) name) pair))
-                     my/window-layouts-alist)))
-    (if (/= (length my/window-layouts-alist) orig-length)
-        (message "Layout '%s' deleted." name)
-      (message "No layout found with the name '%s'." name))))
-
-(defun my-delete-whitespace-forward ()
+(defun my/delete-whitespace-forward ()
   "Delete whitespace from point up to the next non-whitespace char."
   (interactive)
   (delete-region (point)
                  (progn (skip-chars-forward " \t") (point))))
 
-(global-set-key (kbd "C-c d") #'my-delete-whitespace-forward)
 
-
-(keymap-global-unset "C-x C-z")
 (keymap-global-unset "C-h" t)
 (keymap-global-unset "C-j" t)
 (keymap-global-unset "C-q" t)
@@ -227,26 +160,21 @@
 
 (keymap-global-set "C-," 'other-window)
 (keymap-global-set "C-." 'my/other-window-1)
-(keymap-global-set "M-<up>"   'my/transpose-line-backward)
-(keymap-global-set "M-<down>" 'my/transpose-line-forward)
 
-(keymap-global-set "M-L" 'mark-word)
-(keymap-global-set "M-n" 'forward-paragraph)
+(keymap-global-set "C-z" 'mark-word)
 (keymap-global-set "M-o" 'my/duplicate-dwim)
-(keymap-global-set "M-p" 'backward-paragraph)
 (keymap-global-set "M-v" 'my/x-selection-to-emacs)
-(keymap-global-set "M-{" 'winner-undo)
-(keymap-global-set "M-}" 'winner-redo)
-
-(keymap-global-set "C-M-;"   'kill-sexp)
-(keymap-global-set "C-M-'"   'backward-kill-sexp)
 
 (keymap-global-set "C-<tab>"   'other-window)
 (keymap-global-set "<backtab>" 'my/other-window-1)
 
-(keymap-global-set "<delete>"      'delete-char)
-(keymap-global-set "M-<backspace>" 'backward-kill-word)
-(keymap-global-set "M-<delete>"    'kill-word)
+(keymap-global-set "M-<up>"          'my/transpose-line-backward)
+(keymap-global-set "M-<down>"        'my/transpose-line-forward)
+(keymap-global-set "<delete>"        'delete-char)
+(keymap-global-set "M-<backspace>"   'backward-kill-word)
+(keymap-global-set "M-<delete>"      'kill-word)
+(keymap-global-set "C-M-<backspace>" 'backward-kill-sexp)
+(keymap-global-set "C-M-<delete>"    'kill-sexp)
 
 (keymap-global-set   "<prior>"     'my/scroll-half-down)
 (keymap-global-set   "<next>"      'my/scroll-half-up)
@@ -266,84 +194,86 @@
 (keymap-global-set "C-v" help-map)
 
 
-(defvar my-prefix-key-1 "C-j")
-(defvar my-prefix-key-2 "C-h")
+(defvar my-prefix-key-1 "C-h")
+(defvar my-prefix-key-2 "C-j")
 (defvar my-prefix-key-3 "C-q")
 
-;; general commands
-(defvar-keymap my-prefix-map-1 
-  ;; buffer
-  my-prefix-key-1 #'buffer-menu
+;; frequent commands
+(defvar-keymap my-prefix-map-1
+  "C-y" #'describe-prefix-bindings
+
+  ;; navigation
+  "C-h" #'winner-undo
+  "C-a" #'next-buffer
+  "C-e" #'previous-buffer
+  "C-i" #'winner-redo
+
   "C-f" #'find-file
+  "C-o" #'buffer-menu
   "b"   #'switch-to-buffer
   "C-b" #'list-buffers
+
+  ;; toggles
+  "C-j" #'read-only-mode
+  "C-n" #'my/toggle-line-numbers
+  "C-w" #'whitespace-mode
+  "C-v" #'visual-line-mode
+
+  ;; editing
+  "C-r" #'string-rectangle
+  "C-s" #'replace-string
+  "d"   #'my/delete-whitespace-forward
+
+  ;; windows
+  "C-'" #'delete-other-windows
+  "C-," #'split-window-below
+  "C-." #'split-window-right
+  "C-/" #'delete-window
+  "C-_" #'delete-window
+
+  ;; bookmarks
+  "C-k" #'bookmark-jump
+  "C-l" #'bookmark-bmenu-list
+  "C-d" #'bookmark-set
+
+  ;; shell & compile
+  "x"   #'shell-command
+  "C-x" #'shell
+  "c"   #'compile
+  "C-c" #'recompile
+
+  ;; rectangles
+  "SPC"   #'rectangle-mark-mode
+  "C-SPC" #'rectangle-mark-mode)
+
+;; infrequent commands
+(defvar-keymap my-prefix-map-2
+  ;; buffer
   "C-r" #'rename-buffer
   "C-v" #'revert-buffer
   "C-k" #'kill-current-buffer
+
+  ;; org
+  "C-a" #'org-agenda
+
+  ;; tabs
+  "C-t" #'tabify
+  "t"   #'untabify
+
+  ;; launchers
+  "C-<return>" #'my/launcher
+  "S-<return>" #'my/spawn-st)
+
+;; rare commands
+(defvar-keymap my-prefix-map-3
+  my-prefix-key-3  #'suspend-emacs
 
   ;; theme
   "t"   #'load-theme
   "C-t" #'my/disable-all-themes
 
-  ;; org
-  "C-a"   #'org-agenda
-
-  ;; bookmarks
-  "C-," #'bookmark-jump
-  "C-." #'bookmark-set
-  "C-/" #'bookmark-bmenu-list
-  "C-_" #'bookmark-bmenu-list
-
-  ;; shell & compile
-  "x"     #'shell-command
-  "C-x"   #'shell
-  "'"     #'compile
-  "C-'"   #'recompile
-
-  ;; launchers
-  "<RET>"   #'my/start-process
-  "C-<return>" #'my/launcher
-  "S-<return>" #'my/spawn-st)
-
-;; window & edit commands
-(defvar-keymap my-prefix-map-2
-  ;; navigation
-  "C-y"   #'winner-undo
-  "C-h"   #'next-buffer
-  "C-a"   #'previous-buffer
-  "C-e"   #'winner-redo
-
-  ;; rectangles
-  "SPC"   #'rectangle-mark-mode
-  "C-SPC" #'rectangle-mark-mode
-
-  ;; tabs
-  "C-t"   #'tabify
-  "t"     #'untabify
-
-  ;; toggles
-  my-prefix-key-1 #'read-only-mode
-  "C-n"   #'my/toggle-line-numbers
-  "C-w"   #'whitespace-mode
-  "C-v"   #'visual-line-mode
-
-  ;; editing
-  "C-r"   #'replace-string
-  "C-s"   #'string-rectangle
-
-  ;; windows
-  "C-,"   #'split-window-below
-  "C-."   #'delete-other-windows
-  "C-/"   #'split-window-right
-  "C-_"   #'split-window-right
-  "C-;"   #'delete-window
-
   ;; misc
-  "'"     #'quoted-insert)
-
-;; infrequent commands
-(defvar-keymap my-prefix-map-3
-  my-prefix-key-3  #'suspend-emacs)
+  "'"   #'quoted-insert)
 
 
 (keymap-global-set my-prefix-key-1 my-prefix-map-1)
@@ -352,10 +282,10 @@
 
 
 (defvar-keymap my-lisp-interaction-map
-  :parent my-prefix-map-1
-  "C-e" #'eval-print-last-sexp)
+  :parent my-prefix-map-2
+  my-prefix-key-2 #'eval-print-last-sexp)
 (with-eval-after-load 'elisp-mode
-  (keymap-set lisp-interaction-mode-map my-prefix-key-1 my-lisp-interaction-map))
+  (keymap-set lisp-interaction-mode-map my-prefix-key-2 my-lisp-interaction-map))
 
 
 (use-package color
@@ -378,7 +308,7 @@
 
 
 (with-eval-after-load 'org
-  (keymap-set org-mode-map my-prefix-key-1 my-prefix-map-1))
+  (keymap-set org-mode-map my-prefix-key-2 my-prefix-map-2))
 
 
 (use-package magit
@@ -386,7 +316,7 @@
   (setq magit-define-global-key-bindings 'recommended)
   :bind
   (("C-x g" . magit-status)
-   :map my-prefix-map-1
+   :map my-prefix-map-2
    ("g" . magit-status)))
 
 
@@ -411,7 +341,6 @@
   :bind
   (:map my-prefix-map-1
         ("m" . mu4e)))
-
 
 
 (use-package notmuch

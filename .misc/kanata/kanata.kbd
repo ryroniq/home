@@ -39,7 +39,7 @@
 ;; Ryroniq (Gallium based kanata layout)
 (deflayer ry
   @qw  lsft lctl lalt lmet @nav -    =    @fn  rmet ralt rctl rsft
-       j    l    d    c    v    k    f    o    u    q    _    _
+       k    l    d    c    v    j    f    o    u    q    _    _
   @cap n    r    s    t    g    y    h    a    e    i    _
        ;    x    m    w    z    b    p    ,    .    /
                            @spc

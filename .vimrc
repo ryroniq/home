@@ -54,10 +54,10 @@ augroup restore_cursor
 augroup END
 
 let s:keys = {
-  \ 'y': 'h', 'h': 'j', 'a': 'k', 'e': 'l', 'j': 'q', 'l': 'z',
-  \ 's': 'a', 'm': 'e', 'z': 'm', 'k': 'y', 'q': ':',
-  \ 'Y': 'H', 'H': 'J', 'A': 'K', 'E': 'L', 'J': 'Q', 'L': 'Z',
-  \ 'S': 'A', 'M': 'E', 'Z': 'M', 'K': 'Y', 'Q': ';',
+  \ 'y': 'h', 'h': 'j', 'a': 'k', 'e': 'l', 'k': 'q', 'l': 'z',
+  \ 's': 'a', 'm': 'e', 'z': 'm', 'q': 'y', 'j': ':',
+  \ 'Y': 'H', 'H': 'J', 'A': 'K', 'E': 'L', 'K': 'Q', 'L': 'Z',
+  \ 'S': 'A', 'M': 'E', 'Z': 'M', 'Q': 'Y', 'J': ';',
   \ ';': ':', ':': ';',
   \ }
 for [s:lhs, s:rhs] in items(s:keys)
@@ -99,10 +99,10 @@ nnoremap Q @@
 nnoremap _ <C-w>s
 nnoremap \| <C-w>v
 
-nnoremap <C-j> @
-nnoremap <C-q> :q<CR>
+nnoremap <C-k> @
+nnoremap <C-j> :q<CR>
 nnoremap <C-s> :w<CR>
-nnoremap <C-c> :shell<CR>
+nnoremap <C-q> :shell<CR>
 nnoremap <C-`> :marks<CR>
 nnoremap <C-'> :marks<CR>
 nnoremap <C-i> :jumps<CR>
@@ -113,17 +113,20 @@ nnoremap <C-y> <C-w>h
 nnoremap <C-h> <C-w>j
 nnoremap <C-a> <C-w>k
 nnoremap <C-e> <C-w>l
-nnoremap <C-n> :cnext<CR>
-nnoremap <C-p> :cprev<CR>
 
-nnoremap <C-b><C-a> :badd<space>
+nnoremap <C-c><C-c> :q<CR>
+nnoremap <C-c><C-s> :shell<CR>
+nnoremap <C-c><C-n> :cnext<CR>
+nnoremap <C-c><C-p> :cprev<CR>
+
+nnoremap <C-t> :buffers<CR>
+nnoremap <C-n> :bnext<CR>
+nnoremap <C-p> :bprev<CR>
 nnoremap <C-b><C-b> :b<space>
 nnoremap <C-b><C-d> :bdel<CR>
+nnoremap <C-b><C-a> :bfirst<CR>
 nnoremap <C-b><C-e> :blast<CR>
-nnoremap <C-b><C-f> :bfirst<CR>
-nnoremap <C-b><C-l> :buffers<CR>
-nnoremap <C-b><C-n> :bnext<CR>
-nnoremap <C-b><C-p> :bprev<CR>
+nnoremap <C-b><C-t> :e<space>
 
 nnoremap <C-w><C-y> <C-w>H
 nnoremap <C-w><C-h> <C-w>J
