@@ -1,0 +1,12 @@
+.aliasrc
+.dotfilelist.txt
+.gitconfig
+.mailcap
+.muttrc
+.muttrc-common
+.muttrc-default
+.profile
+.tmux
+.tmux.conf
+.vimrc
+.zshrc

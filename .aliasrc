@@ -97,3 +97,5 @@ alias show-cursor='printf "\033[?25h"'
 
 alias aws-profile-default='export AWS_PROFILE=default'
 alias aws-profile-files='export AWS_PROFILE=files'
+
+alias rsy-dotfiles='rsync -av --files-from=.dotfilelist.txt ~'
