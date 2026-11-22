@@ -84,6 +84,10 @@ alias gstpush='git stash'
 alias gsw='git switch'
 alias gtg='git tag'
 
+alias gdiary-cd='cd ~/.diary'
+alias gdiary-new='git -C ~/.diary commit --allow-empty'
+alias gdiary-log='git -C ~/.diary log --format="%ad  %s" --date=short'
+
 alias gpg-agent-updatetty='gpg-connect-agent updatestartuptty /bye'
 alias gpg-agent-reload='gpg-connect-agent reloadagent /bye'
 alias gpg-agent-kill='gpg-connect-agent killagent /bye'
