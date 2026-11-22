@@ -72,4 +72,37 @@ yp() {
   print -r -- $p
 }
 
+qrshow() {
+    local sel=${1:-primary} mode=$2 data qr rows cols img
+
+    data=$(xclip -o -selection "$sel" 2>/dev/null)
+    if [[ -z $data ]]; then
+        echo "qrshow: '$sel' selection is empty" >&2
+        return 1
+    fi
+
+    printf '%s\n' "$data"
+
+    # auto: show in the terminal if it fits, else fall back to feh
+    if [[ $mode != g ]]; then
+        qr=$(printf '%s' "$data" | qrencode -t ANSIUTF8 -m 2) || return 1
+        rows=$(printf '%s\n' "$qr" | wc -l)
+        cols=${COLUMNS:-$(tput cols)}
+        # each line holds 2 module rows, so width ≈ 2 × lines
+        if [[ $mode == t ]] || (( rows * 2 <= cols && rows < ${LINES:-$(tput lines)} )); then
+            printf '%s\n' "$qr"
+            return
+        fi
+    fi
+
+    img=$(mktemp --suffix=.png) || return 1
+    if printf '%s' "$data" | qrencode -s 10 -m 2 -o "$img"; then
+        feh --title "QR ($sel)" "$img"
+    fi
+    rm -f "$img"
+}
+
+alias qrencode-primary='qrshow primary'
+alias qrencode-clipboard='qrshow clipboard'
+
 [ -f $HOME/.zshrc.local ] && source $HOME/.zshrc.local
