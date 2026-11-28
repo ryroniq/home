@@ -195,8 +195,8 @@
 
 
 (defvar my-prefix-key-1 "C-h")
-(defvar my-prefix-key-2 "C-j")
-(defvar my-prefix-key-3 "C-q")
+(defvar my-prefix-key-2 "C-;")
+(defvar my-prefix-key-3 "C-j")
 
 ;; frequent commands
 (defvar-keymap my-prefix-map-1
@@ -214,7 +214,7 @@
   "C-b" #'list-buffers
 
   ;; toggles
-  "C-j" #'read-only-mode
+  "C-;" #'read-only-mode
   "C-n" #'my/toggle-line-numbers
   "C-w" #'whitespace-mode
   "C-v" #'visual-line-mode

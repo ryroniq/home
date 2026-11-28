@@ -40,22 +40,23 @@ bind attach,browser,generic,index,pager K noop
 
 bind attach,index,pager x   noop
 bind attach,index,pager p   noop
-bind attach,index,pager b   display-toggle-weed
-bind attach,index,pager B   bounce-message
+bind attach,index,pager k   display-toggle-weed
+bind attach,index,pager b   bounce-message
 bind attach,index,pager \Cy previous-page
 bind attach,index,pager \Ce next-page
-bind attach,index,browser g first-entry
-bind attach,index,browser G last-entry
+bind attach,index,pager \Ca half-up
+bind attach,index,pager \Ch half-down
 bind attach,index,pager R   group-reply
 bind attach,index,pager \CR group-chat-reply
 
-bind index,pager H   next-entry
-bind index,pager A   previous-entry
-bind index,pager N   search-opposite
-bind index,pager \Ca half-up
-bind index,pager \Ch half-down
-bind index,pager e   view-attachments
-bind index,pager E   edit
+bind attach,index,browser g first-entry
+bind attach,index,browser G last-entry
+
+bind index,pager H next-entry
+bind index,pager A previous-entry
+bind index,pager N search-opposite
+bind index,pager e view-attachments
+bind index,pager E edit
 
 bind attach,browser i exit
 bind attach,browser h next-entry
@@ -74,7 +75,7 @@ bind pager a previous-line
 
 bind browser y toggle-mailboxes
 
-bind compose K send-message
+bind compose J send-message
 bind compose y noop
 bind compose F edit-from
 bind compose <Esc>f noop

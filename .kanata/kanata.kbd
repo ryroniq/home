@@ -1,0 +1,86 @@
+(defcfg
+  process-unmapped-keys yes
+)
+
+(defsrc
+  esc  1    2    3    4    5    6    7    8    9    0    -    =
+       q    w    e    r    t    y    u    i    o    p    [    ]
+  caps a    s    d    f    g    h    j    k    l    ;    '
+       z    x    c    v    b    n    m    ,    .    /
+                           spc
+)
+
+(defalias
+  qw  (layer-switch qw)
+  ry  (layer-switch ry)
+  nav (layer-while-held nav)
+  sym (layer-while-held sym)
+  fn  (layer-while-held fn)
+
+  cap (tap-hold-press 200 200 esc lctl)
+  spc (tap-hold-release 200 200 spc @nav)
+
+  exc S-1
+  atm S-2
+  shp S-3
+  dlr S-4
+  pct S-5
+  crt S-6
+  amp S-7
+  ast S-8
+  lp  S-9
+  rp  S-0
+  lb  S-[
+  rb  S-]
+  vbr S-\
+  lbr S--
+  pls S-=
+  lt  S-,
+  gt  S-.
+  qst S-/
+)
+
+;; Ryroniq (Gallium based kanata layout)
+(deflayer ry
+  grv  lsft lctl lalt lmet @sym del  bspc @fn  rmet ralt rctl rsft
+       b    l    d    c    v    j    f    o    u    ;    _    _
+  @cap n    r    s    t    g    y    h    a    e    i    _
+       q    x    m    w    z    k    p    ,    .    /
+                           @spc
+)
+
+;; QWERTY
+(deflayer qw
+  grv  lsft lctl lalt lmet @sym del  bspc @fn  rmet ralt rctl rsft
+       _    _    _    _    _    _    _    _    _    _    _    _
+  @cap _    _    _    _    _    _    _    _    _    _    _
+       _    _    _    _    _    _    _    _    _    _
+                           @spc
+)
+
+;; Navigation
+(deflayer nav
+  _    _    _    _    _    _    @ry  @qw  _    _    _    _    _
+       1    2    3    4    5    home pgup pgdn end  -    _    _
+  _    6    7    8    9    0    left down up  right ret  =
+       kp/  kp*  kp-  kp+  esc  bspc del  ins  spc  tab
+                           XX
+)
+
+;; Symbols
+(deflayer sym
+  _    _    _    _    _    XX   _    _    _    _    _    _    _
+       @lbr @pls @vbr _    menu grv  @exc @atm @shp @dlr _    _
+  _    _    _    _    _    _    [    @pct @crt @amp @ast ]
+       _    _    _    _    _    @lp  @rp  -    =    \
+                           _
+)
+
+;; Function keys
+(deflayer fn
+  _    _    _    _    _    _    @exc @atm XX   _    _    _    _   
+       f1   f2   f3   f4   f5   @shp @dlr _    @lp  @rp  @lb  @rb
+  _    f6   f7   f8   f9   f10  @pct @crt _    _    _    _
+       f11  f12  [    ]    \    @amp @ast _    _    _
+                           _
+)

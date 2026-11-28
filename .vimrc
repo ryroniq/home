@@ -54,10 +54,10 @@ augroup restore_cursor
 augroup END
 
 let s:keys = {
-  \ 'y': 'h', 'h': 'j', 'a': 'k', 'e': 'l', 'k': 'q', 'l': 'z',
-  \ 's': 'a', 'm': 'e', 'z': 'm', 'q': 'y', 'j': ':',
-  \ 'Y': 'H', 'H': 'J', 'A': 'K', 'E': 'L', 'K': 'Q', 'L': 'Z',
-  \ 'S': 'A', 'M': 'E', 'Z': 'M', 'Q': 'Y', 'J': ';',
+  \ 'y': 'h', 'h': 'j', 'a': 'k', 'e': 'l',
+  \ 'Y': 'H', 'H': 'J', 'A': 'M', 'E': 'L', 'M': 'K',
+  \ 'k': 'y', 'l': 'e', 's': 'a',
+  \ 'K': 'Y', 'L': 'E', 'S': 'A',
   \ ';': ':', ':': ';',
   \ }
 for [s:lhs, s:rhs] in items(s:keys)
@@ -96,13 +96,13 @@ nnoremap <C-S-up>    <C-w>K
 nnoremap <C-S-right> <C-w>L
 
 nnoremap Q @@
-nnoremap _ <C-w>s
-nnoremap \| <C-w>v
+nnoremap j <C-w>s
+nnoremap J <C-w>v
 
-nnoremap <C-k> @
-nnoremap <C-j> :q<CR>
+nnoremap <C-q> @
+nnoremap <C-;> :q<CR>
 nnoremap <C-s> :w<CR>
-nnoremap <C-q> :shell<CR>
+nnoremap <C-j> :e<space>
 nnoremap <C-`> :marks<CR>
 nnoremap <C-'> :marks<CR>
 nnoremap <C-i> :jumps<CR>
@@ -114,7 +114,6 @@ nnoremap <C-h> <C-w>j
 nnoremap <C-a> <C-w>k
 nnoremap <C-e> <C-w>l
 
-nnoremap <C-c><C-c> :q<CR>
 nnoremap <C-c><C-s> :shell<CR>
 nnoremap <C-c><C-n> :cnext<CR>
 nnoremap <C-c><C-p> :cprev<CR>
@@ -126,7 +125,6 @@ nnoremap <C-b><C-b> :b<space>
 nnoremap <C-b><C-d> :bdel<CR>
 nnoremap <C-b><C-a> :bfirst<CR>
 nnoremap <C-b><C-e> :blast<CR>
-nnoremap <C-b><C-t> :e<space>
 
 nnoremap <C-w><C-y> <C-w>H
 nnoremap <C-w><C-h> <C-w>J
@@ -135,17 +133,22 @@ nnoremap <C-w><C-e> <C-w>L
 
 let mapleader = "\\"
 
-nnoremap <leader><tab> :set expandtab!<CR>
+nnoremap <leader><tab> :set expandtab!<CR>:set expandtab?<CR>
+nnoremap <leader>n :tabnew<CR>
+nnoremap <leader>c :tabclose<CR>
 nnoremap <leader>t :Retab<CR>
 nnoremap <leader>o :tabonly<CR>
 nnoremap <leader>p :pwd<CR>
 nnoremap <leader>i :set number!<CR>
 nnoremap <leader>' :set list!<CR>
-nnoremap <leader>- :tabclose<CR>
-nnoremap <leader>= :tabnew<CR>
 nnoremap <leader>[ :tabprev<CR>
 nnoremap <leader>] :tabnext<CR>
 nnoremap <leader>/ :set hlsearch!<CR>
+
+inoremap <C-l>  <C-x>
+inoremap <C-'>  <C-r>"
+inoremap <S-CR> <C-o>o
+inoremap <C-CR> <C-o>O
 
 cnoremap <C-h> <Down>
 cnoremap <C-a> <Up>
